@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.checklearn.view.CameraScreen
 
 @Composable
 fun AppNavigation() {
@@ -15,6 +16,7 @@ fun AppNavigation() {
         startDestination = Routes.CAMERA
     ) {
         composable(Routes.CAMERA) {
+            CameraScreen {  }
         }
         composable(Routes.STATISTIC) {
         }
