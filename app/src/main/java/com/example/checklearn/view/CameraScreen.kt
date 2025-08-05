@@ -3,6 +3,7 @@ package com.example.checklearn.view
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Matrix
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
@@ -41,16 +42,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
+import kotlin.apply
 
 @Composable
 fun CameraScreen(
-    cameraViewModel: CameraViewModel = viewModel<CameraViewModel>(),
+    cameraViewModel: CameraViewModel,
     onCameraClick : () -> Unit
 ) {
 
@@ -137,7 +138,7 @@ fun CameraScreen(
                             object : ImageCapture.OnImageCapturedCallback() {
                                 override fun onCaptureSuccess(image: ImageProxy) {
                                     super.onCaptureSuccess(image)
-                                    val bitmap = image.toBitmap()
+                                    val bitmap = image.toBitmap().toRotates(image.imageInfo.rotationDegrees.toFloat())
                                     imageCash.value = bitmap
                                     isPhotoTaking.value = true
                                     image.close()
@@ -184,4 +185,9 @@ fun CameraScreen(
             }
         }
     }
+}
+
+fun Bitmap.toRotates(degrees: Float): Bitmap{
+    val matrix = Matrix().apply { postRotate(degrees) }
+    return Bitmap.createBitmap(this,0,0,width,height,matrix,true)
 }
