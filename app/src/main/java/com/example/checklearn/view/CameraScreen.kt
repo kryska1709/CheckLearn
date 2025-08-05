@@ -41,14 +41,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.MyGray
+import com.example.checklearn.viewmodel.CameraViewModel
 
 @Composable
 fun CameraScreen(
-    onCameraClick : () -> Unit,
+    cameraViewModel: CameraViewModel = viewModel<CameraViewModel>(),
+    onCameraClick : () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -111,7 +114,8 @@ fun CameraScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
@@ -157,6 +161,10 @@ fun CameraScreen(
                         textColor = androidx.compose.ui.graphics.Color.White,
                         modifier = Modifier.weight(1f)
                     ) {
+                        imageCash.value?.let {
+                            cameraViewModel.saveImage(it)
+                            onCameraClick()
+                        }
                     }
                 }
             }
