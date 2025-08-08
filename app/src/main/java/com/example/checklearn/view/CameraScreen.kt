@@ -68,9 +68,9 @@ fun CameraScreen(
             permissions.entries.forEach { //перебираем все разрешения
                 val isGranted = it.value //есть или нет доступа
                 if(isGranted){
-                    Log.d("permission","херачь фото все окей")
+                    Log.d("permission","кидай фото все окей")
                 } else {
-                    Toast.makeText(context,"хрен тебе а не фото", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"нет фото", Toast.LENGTH_SHORT).show()
                 }
             }
         }

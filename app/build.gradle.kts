@@ -57,6 +57,8 @@ dependencies {
 
     implementation(libs.text.recognition)
 
+    implementation(libs.opencv)
+
     implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
