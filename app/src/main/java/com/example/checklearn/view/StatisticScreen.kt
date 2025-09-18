@@ -42,7 +42,7 @@ fun StatisticScreen(
     LaunchedEffect(Unit) {
         image.value?.let { text.value = HandwriteRecognizer().recognizer(it) }
     }
-    CustomScaffold("Статистика", navigationIcon = {
+    CustomScaffold("Задания", navigationIcon = {
         IconButton(
             onClick = {onBackClick()}
         ) {
