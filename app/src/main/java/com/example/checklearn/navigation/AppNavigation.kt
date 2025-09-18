@@ -9,12 +9,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.checklearn.view.CameraScreen
 import com.example.checklearn.view.StatisticScreen
 import com.example.checklearn.viewmodel.CameraViewModel
+import com.example.checklearn.viewmodel.TaskViewModel
 
 @Composable
 fun AppNavigation() {
 
     val navController = rememberNavController()
     val cameraViewModel: CameraViewModel = viewModel<CameraViewModel>()
+    val taskViewModel: TaskViewModel = viewModel<TaskViewModel>()
 
     NavHost(
         navController = navController,

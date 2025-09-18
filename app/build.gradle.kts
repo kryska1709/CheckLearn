@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.checklearn"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.checklearn"
@@ -59,8 +59,6 @@ dependencies {
     implementation(libs.text.recognition)
 
     implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.opencv)
 
     implementation(libs.coil.compose)
 
