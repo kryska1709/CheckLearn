@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -42,15 +44,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation.NavController
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
+import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
-import kotlin.apply
+import kotlinx.coroutines.launch
 
 @Composable
 fun CameraScreen(
+    navController: NavController,
     cameraViewModel: CameraViewModel,
     onCameraClick : () -> Unit
 ) {
@@ -60,6 +65,7 @@ fun CameraScreen(
     val cameraController = remember { LifecycleCameraController(context) }
     val imageCash = remember { mutableStateOf<Bitmap?>(null) }
     val isPhotoTaking = remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     //лаунчер для получения разрешений
     val launcher = rememberLauncherForActivityResult(
@@ -80,108 +86,120 @@ fun CameraScreen(
             arrayOf(Manifest.permission.CAMERA)
         )
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(androidx.compose.ui.graphics.Color.Black)
-    ) {
-        if (isPhotoTaking.value && imageCash.value != null) {
-            Image(
-                bitmap = imageCash.value!!.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Fit
-            )
-        } else {
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = {
-                    PreviewView(it).apply {
-                        layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                        setBackgroundColor(Color.BLACK)
-                        scaleType = PreviewView.ScaleType.FIT_CENTER
-                    }.also {
-                        it.controller = cameraController
-                        cameraController.bindToLifecycle(lifecycleOwner)
-                    }
-                }
-            )
-        }
-        Column(
-            modifier = Modifier.fillMaxWidth()
-                .background(androidx.compose.ui.graphics.Color.Transparent)
-                .align(alignment = Alignment.BottomCenter),
-            verticalArrangement = Arrangement.spacedBy(27.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+    SideBarMenu(navController) { drawerState ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(androidx.compose.ui.graphics.Color.Black)
         ) {
-            Row(
+            if (isPhotoTaking.value && imageCash.value != null) {
+                Image(
+                    bitmap = imageCash.value!!.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                AndroidView(
+                    modifier = Modifier.fillMaxSize(),
+                    factory = {
+                        PreviewView(it).apply {
+                            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                            setBackgroundColor(Color.BLACK)
+                            scaleType = PreviewView.ScaleType.FIT_CENTER
+                        }.also {
+                            it.controller = cameraController
+                            cameraController.bindToLifecycle(lifecycleOwner)
+                        }
+                    }
+                )
+            }
+            Column(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
+                    .background(androidx.compose.ui.graphics.Color.Transparent)
+                    .align(alignment = Alignment.BottomCenter),
+                verticalArrangement = Arrangement.spacedBy(27.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if(!isPhotoTaking.value){
-                    CustomButton(
-                        color = ButtonDefaults.buttonColors(BlueMainColor),
-                        text = "Сфотографировать",
-                        textColor = androidx.compose.ui.graphics.Color.White,
-                        icon = {
-                            Icon(
-                                painter = painterResource(R.drawable.camera),
-                                contentDescription = null,
-                                tint = androidx.compose.ui.graphics.Color.White
+                Button(
+                    onClick = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+                ) {
+                    Text(text = "открыть меню")
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    if (!isPhotoTaking.value) {
+                        CustomButton(
+                            color = ButtonDefaults.buttonColors(BlueMainColor),
+                            text = "Сфотографировать",
+                            textColor = androidx.compose.ui.graphics.Color.White,
+                            icon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.camera),
+                                    contentDescription = null,
+                                    tint = androidx.compose.ui.graphics.Color.White
+                                )
+                            }
+                        ) {
+                            cameraController.takePicture(
+                                ContextCompat.getMainExecutor(context),
+                                object : ImageCapture.OnImageCapturedCallback() {
+                                    override fun onCaptureSuccess(image: ImageProxy) {
+                                        super.onCaptureSuccess(image)
+                                        val bitmap = image.toBitmap()
+                                            .toRotates(image.imageInfo.rotationDegrees.toFloat())
+                                        imageCash.value = bitmap
+                                        isPhotoTaking.value = true
+                                        image.close()
+                                    }
+                                }
                             )
                         }
-                    ) {
-                        cameraController.takePicture(
-                            ContextCompat.getMainExecutor(context),
-                            object : ImageCapture.OnImageCapturedCallback() {
-                                override fun onCaptureSuccess(image: ImageProxy) {
-                                    super.onCaptureSuccess(image)
-                                    val bitmap = image.toBitmap().toRotates(image.imageInfo.rotationDegrees.toFloat())
-                                    imageCash.value = bitmap
-                                    isPhotoTaking.value = true
-                                    image.close()
-                                }
+                    } else {
+                        CustomButton(
+                            color = ButtonDefaults.buttonColors(androidx.compose.ui.graphics.Color.White),
+                            text = "Повторить",
+                            textColor = BlueMainColor,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            isPhotoTaking.value = false
+                            imageCash.value = null
+                        }
+                        CustomButton(
+                            color = ButtonDefaults.buttonColors(BlueMainColor),
+                            text = "Подтвердить",
+                            textColor = androidx.compose.ui.graphics.Color.White,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            imageCash.value?.let {
+                                cameraViewModel.saveImage(it)
+                                onCameraClick()
                             }
-                        )
-                    }
-                } else {
-                    CustomButton(
-                        color = ButtonDefaults.buttonColors(androidx.compose.ui.graphics.Color.White),
-                        text = "Повторить",
-                        textColor = BlueMainColor,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        isPhotoTaking.value = false
-                        imageCash.value = null
-                    }
-                    CustomButton(
-                        color = ButtonDefaults.buttonColors(BlueMainColor),
-                        text = "Подтвердить",
-                        textColor = androidx.compose.ui.graphics.Color.White,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        imageCash.value?.let {
-                            cameraViewModel.saveImage(it)
-                            onCameraClick()
                         }
                     }
                 }
-            }
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .background(MyGray)
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ){
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = "Сфотографируйте задание для проверки",
-                    fontSize = 22.sp,
-                    color = BlueMainColor
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .background(MyGray)
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = "Сфотографируйте задание для проверки",
+                        fontSize = 22.sp,
+                        color = BlueMainColor
+                    )
+                }
             }
         }
     }

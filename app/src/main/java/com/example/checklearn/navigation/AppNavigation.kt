@@ -23,7 +23,7 @@ fun AppNavigation() {
         startDestination = Routes.CAMERA
     ) {
         composable(Routes.CAMERA) {
-            CameraScreen(cameraViewModel) {
+            CameraScreen(navController,cameraViewModel) {
                 navController.navigate(Routes.STATISTIC)
             }
         }
@@ -33,6 +33,10 @@ fun AppNavigation() {
             }
         }
         composable(Routes.TASKS) {
+        }
+
+        composable(Routes.HISTORY) {
+
         }
     }
 }
