@@ -1,6 +1,5 @@
 package com.example.checklearn.view
 
-import android.R
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,6 +11,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -26,9 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.network.HandwriteRecognizer
+import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
 
@@ -38,16 +40,21 @@ fun StatisticScreen(
     onBackClick : () -> Unit
 ) {
     val image = cameraViewModel.image.collectAsState()
-    val text = remember { mutableStateOf("") }
+    val text = cameraViewModel.text.collectAsState()
+
     LaunchedEffect(Unit) {
-        image.value?.let { text.value = HandwriteRecognizer().recognizer(it) }
+        image.value?.let { cameraViewModel.updateText(HandwriteRecognizer().recognizer(it))   }
     }
-    CustomScaffold("Задания", navigationIcon = {
-        IconButton(
-            onClick = {onBackClick()}
-        ) {
-        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null, tint = Color.Black)
-    }}) { innerPadding ->
+
+    CustomScaffold(title = "Задания",
+        navigationIcon = {
+            IconButton(
+                onClick = {onBackClick()}
+            ) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null, tint = Color.Black)
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
@@ -56,13 +63,18 @@ fun StatisticScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Log.i("ОШИБКА STATISTICsCREEN ^:(", image.value.toString())
-            image.value?.let { Image(it.asImageBitmap(), contentDescription = null) }
+            image.value?.let { Image(bitmap = it.asImageBitmap(), contentDescription = null) }
             Text(
-                text = text.value,
+                text = text.value ?: "",
                 color = Color.Black,
                 fontSize = 20.sp,
             )
+            CustomButton(
+                modifier = Modifier.padding(8.dp),
+                color = ButtonDefaults.buttonColors(BlueMainColor),
+                text = "Сгенерировать тест",
+                textColor = Color.White
+            ) { }
         }
     }
 }
