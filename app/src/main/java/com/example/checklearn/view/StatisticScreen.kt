@@ -1,6 +1,5 @@
 package com.example.checklearn.view
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,8 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,16 +25,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
+import com.example.checklearn.model.LoadingState
+import com.example.checklearn.navigation.LocalNavigator
+import com.example.checklearn.navigation.Routes
 import com.example.checklearn.network.HandwriteRecognizer
 import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
+import com.example.checklearn.viewmodel.TaskViewModel
 
 @Composable
 fun StatisticScreen(
     cameraViewModel: CameraViewModel,
-    onBackClick : () -> Unit
+    taskViewModel: TaskViewModel,
 ) {
+    val navigator = LocalNavigator.current
     val image = cameraViewModel.image.collectAsState()
     val text = cameraViewModel.text.collectAsState()
 
@@ -49,7 +50,7 @@ fun StatisticScreen(
     CustomScaffold(title = "Задания",
         navigationIcon = {
             IconButton(
-                onClick = {onBackClick()}
+                onClick = { navigator.popBackStack()}
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null, tint = Color.Black)
             }
@@ -74,7 +75,10 @@ fun StatisticScreen(
                 color = ButtonDefaults.buttonColors(BlueMainColor),
                 text = "Сгенерировать тест",
                 textColor = Color.White
-            ) { }
+            ) {
+                taskViewModel.updateLoadingState(LoadingState.Loading)
+                navigator.navigate(Routes.TASKS)
+            }
         }
     }
 }

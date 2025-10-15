@@ -35,15 +35,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.checklearn.R
 import com.example.checklearn.model.SideBarModel
+import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Routes
 import com.example.checklearn.ui.theme.MyGray
 import kotlinx.coroutines.launch
 
 @Composable
 fun SideBarMenu(
-    navController: NavController,
     action: @Composable (DrawerState) -> Unit
 ) {
+    val navigator = LocalNavigator.current
     val scope = rememberCoroutineScope()
     val routes = listOf(
         SideBarModel("Камера", imageId = R.drawable.camera, Routes.CAMERA),
@@ -84,7 +85,7 @@ fun SideBarMenu(
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.clickable{navController.navigate(it.route)}
+                                modifier = Modifier.clickable{navigator.navigate(it.route)}
                             ){
                                 Text(text = it.title,
                                     fontSize = 16.sp)

@@ -48,6 +48,8 @@ import androidx.navigation.NavController
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.SideBarMenu
+import com.example.checklearn.navigation.LocalNavigator
+import com.example.checklearn.navigation.Routes
 import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
@@ -55,11 +57,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CameraScreen(
-    navController: NavController,
-    cameraViewModel: CameraViewModel,
-    onCameraClick : () -> Unit
+    cameraViewModel: CameraViewModel
 ) {
-
+    val navigator = LocalNavigator.current
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
@@ -86,7 +86,7 @@ fun CameraScreen(
             arrayOf(Manifest.permission.CAMERA)
         )
     }
-    SideBarMenu(navController) { drawerState ->
+    SideBarMenu() { drawerState ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -181,7 +181,7 @@ fun CameraScreen(
                         ) {
                             imageCash.value?.let {
                                 cameraViewModel.saveImage(it)
-                                onCameraClick()
+                                navigator.navigate(Routes.STATISTIC)
                             }
                         }
                     }
