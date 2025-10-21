@@ -14,7 +14,7 @@ import com.example.checklearn.ui.theme.MyGray
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomScaffold(
-    title: String,
+    title: String? = null,
     navigationIcon: @Composable () -> Unit,
     content : @Composable (innerPadding: PaddingValues) -> Unit
 ) {
@@ -22,11 +22,13 @@ fun CustomScaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = title,
-                        fontSize = 22.sp,
-                        color = Color.Black
-                    )
+                    title?.let {
+                        Text(
+                            text = it,
+                            fontSize = 22.sp,
+                            color = Color.Black
+                        )
+                    }
                 },
                 navigationIcon = {navigationIcon()},
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MyGray)
