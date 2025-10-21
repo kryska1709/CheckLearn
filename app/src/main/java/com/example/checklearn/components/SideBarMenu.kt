@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +23,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,7 +35,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.checklearn.R
 import com.example.checklearn.model.SideBarModel
 import com.example.checklearn.navigation.LocalNavigator
@@ -48,7 +50,8 @@ fun SideBarMenu(
     val scope = rememberCoroutineScope()
     val routes = listOf(
         SideBarModel("Камера", imageId = R.drawable.camera, Routes.CAMERA),
-        SideBarModel ("История", imageId = R.drawable.history, Routes.HISTORY)
+        SideBarModel ("История", imageId = R.drawable.history, Routes.HISTORY),
+        SideBarModel("О приложении", imageId = R.drawable.info_circle, Routes.INFO)
     )
     val configuration = LocalConfiguration.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -78,7 +81,7 @@ fun SideBarMenu(
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth()
                             .padding(start = 20.dp, top = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(15.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
                         horizontalAlignment = Alignment.Start
                     ) {
                         items(routes){
@@ -88,13 +91,24 @@ fun SideBarMenu(
                                 modifier = Modifier.clickable{navigator.navigate(it.route)}
                             ){
                                 Text(text = it.title,
-                                    fontSize = 16.sp)
+                                    fontSize = 20.sp)
                                 Icon(painter = painterResource(it.imageId),
                                     contentDescription = null,
                                     tint = Color.Black,
                                     modifier = Modifier.size(22.dp))
                             }
                         }
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextButton(
+                        modifier = Modifier.padding(bottom = 24.dp, start= 20.dp),
+                        onClick = {}
+                    ) {
+                        Text(
+                            text = "Выйти из аккаунта",
+                            color = Color.Red,
+                            fontSize = 20.sp
+                        )
                     }
                 }
             }

@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.checklearn.view.CameraScreen
+import com.example.checklearn.view.InfoScreen
 import com.example.checklearn.view.StatisticScreen
 import com.example.checklearn.view.TestScreen
 import com.example.checklearn.viewmodel.CameraViewModel
@@ -52,9 +53,11 @@ fun AppNavigation() {
             composable(Routes.TASKS) {
                 TestScreen(taskViewModel, cameraViewModel)
             }
-
             composable(Routes.HISTORY) {
 
+            }
+            composable(Routes.INFO){
+                InfoScreen()
             }
         }
     }
