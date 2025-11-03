@@ -9,6 +9,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.MyGray
 
 @OptIn(ExperimentalMaterial3Api::class)

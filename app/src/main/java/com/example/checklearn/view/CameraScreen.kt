@@ -102,7 +102,7 @@ fun CameraScreen(
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = null,
-                        tint = androidx.compose.ui.graphics.Color.White
+                        tint = androidx.compose.ui.graphics.Color.Black
                     )
                 }
             }
