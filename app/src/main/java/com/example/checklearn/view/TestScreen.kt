@@ -6,21 +6,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.QuestionItem
@@ -43,10 +45,12 @@ fun TestScreen(
     val answer = taskViewModel.answer.collectAsState()
 
     LaunchedEffect(Unit) {
+        taskViewModel.updateLoadingState(LoadingState.Loading)
         taskViewModel.generateContent(cameraViewModel.text.value.toString())
     }
     SideBarMenu { drawerState ->
         CustomScaffold(
+            title = "Тест",
             navigationIcon = {
                 IconButton(
                     onClick = {
@@ -58,16 +62,17 @@ fun TestScreen(
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = null,
-                        tint = androidx.compose.ui.graphics.Color.White
+                        tint = androidx.compose.ui.graphics.Color.Black
                     )
                 }
             }
-        ) {
+        ) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
                     .background(MyGray)
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -83,12 +88,31 @@ fun TestScreen(
                     }
 
                     LoadingState.Success -> {
-                        answer.value.forEach { question ->
-                            QuestionItem(question)
+                        answer.value.forEachIndexed { index, question ->
+                            QuestionItem(index+1 ,question)
                         }
                     }
 
-                    LoadingState.Error -> TODO()
+                    LoadingState.Error -> {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "Произошла ошибка")
+                            Button(
+                                colors = ButtonDefaults.buttonColors(Color.Red.copy(0.7f)),
+                                onClick = {
+                                    taskViewModel.updateLoadingState(LoadingState.Loading)
+                                    taskViewModel.generateContent(cameraViewModel.text.value.toString())
+                                }
+                            ){
+                                Text(
+                                    text= "Попробовать ещё раз",
+                                    color = Color.White
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

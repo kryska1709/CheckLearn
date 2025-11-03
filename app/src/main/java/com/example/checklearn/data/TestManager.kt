@@ -14,7 +14,7 @@ class TestManager {
 
     suspend fun generateTest(
         text: String
-    ): List<Question> {
+    ): TestResponse {
         val prompt = """
             Ты — эксперт по созданию образовательных материалов. 
             Проанализируй предоставленный текст и создай на его основе тестовые задания с множественным выбором.
@@ -34,7 +34,7 @@ class TestManager {
             }
             
             ИНСТРУКЦИЯ:
-            - Создай 3-5 вопросов на основе текста
+            - Создай 10-15 вопросов на основе текста
             - Вопросы должны проверять понимание основной идеи, деталей и контекста
             - Правильный ответ должен быть только один
             
@@ -55,8 +55,9 @@ class TestManager {
         )
         val response = GeminiService().generateContent(bodyResponse)
         val jsonResponse = response.candidates.first().content.parts.first().text
+        val cleanJson = jsonResponse.removePrefix("```json\n").removeSuffix("```").trim()
 
-        return serializer.decodeFromString(jsonResponse)
+        return serializer.decodeFromString<TestResponse>(cleanJson)
     }
 }
 

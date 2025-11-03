@@ -22,7 +22,7 @@ class TaskViewModel(): ViewModel() {
     ){
         viewModelScope.launch {
             try {
-                _answer.value = TestManager().generateTest(text)
+                _answer.value = TestManager().generateTest(text).questions
                 _loadingState.value = LoadingState.Success
             } catch(e: Exception){
                 Log.e("lox", e.message.toString())

@@ -78,7 +78,8 @@ fun StatisticScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Menu,
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color.Black
                     )
                 }
 
