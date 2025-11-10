@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 fun CustomButton(
     modifier: Modifier = Modifier,
     color: ButtonColors,
-    text: String,
+    text: String? = null,
     textColor: Color,
     enabled : Boolean = true,
     icon: (@Composable () -> Unit)? = null,
@@ -34,10 +34,12 @@ fun CustomButton(
             icon()
             Spacer(Modifier.width(5.dp))
         }
-        Text(
-            text = text,
-            color = textColor,
-            fontSize = 16.sp
-        )
+        text?.let {
+            Text(
+                text = it,
+                color = textColor,
+                fontSize = 16.sp
+            )
+        }
     }
 }

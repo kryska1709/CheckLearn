@@ -3,13 +3,17 @@ package com.example.checklearn.view
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.ImageDecoder
 import android.graphics.Matrix
+import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
@@ -23,9 +27,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,6 +62,7 @@ import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun CameraScreen(
     cameraViewModel: CameraViewModel
@@ -84,6 +89,17 @@ fun CameraScreen(
             }
         }
     )
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            uri?.let {
+                val source = ImageDecoder.createSource(context.contentResolver, it)
+                val bitmap = ImageDecoder.decodeBitmap(source)
+                imageCash.value = bitmap
+                isPhotoTaking.value = true
+            }
+        }
+    )
     LaunchedEffect(Unit) {
         launcher.launch(
             arrayOf(Manifest.permission.CAMERA)
@@ -100,7 +116,7 @@ fun CameraScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Menu,
+                        painter = painterResource(R.drawable.menu),
                         contentDescription = null,
                         tint = androidx.compose.ui.graphics.Color.Black
                     )
@@ -138,7 +154,6 @@ fun CameraScreen(
                     modifier = Modifier.fillMaxWidth()
                         .background(androidx.compose.ui.graphics.Color.Transparent)
                         .align(alignment = Alignment.BottomCenter),
-                    verticalArrangement = Arrangement.spacedBy(27.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row(
@@ -148,31 +163,50 @@ fun CameraScreen(
                         horizontalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
                         if (!isPhotoTaking.value) {
-                            CustomButton(
-                                color = ButtonDefaults.buttonColors(BlueMainColor),
-                                text = "Сфотографировать",
-                                textColor = androidx.compose.ui.graphics.Color.White,
-                                icon = {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                IconButton(
+                                    modifier = Modifier.background(BlueMainColor, CircleShape)
+                                        .size(60.dp),
+                                    onClick = {
+                                        cameraController.takePicture(
+                                            ContextCompat.getMainExecutor(context),
+                                            object : ImageCapture.OnImageCapturedCallback() {
+                                                override fun onCaptureSuccess(image: ImageProxy) {
+                                                    super.onCaptureSuccess(image)
+                                                    val bitmap = image.toBitmap()
+                                                        .toRotates(image.imageInfo.rotationDegrees.toFloat())
+                                                    imageCash.value = bitmap
+                                                    isPhotoTaking.value = true
+                                                    image.close()
+                                                }
+                                            }
+                                        )
+                                    }
+                                ) {
                                     Icon(
+                                        modifier = Modifier.size(30.dp),
                                         painter = painterResource(R.drawable.camera),
+                                        tint = androidx.compose.ui.graphics.Color.White,
+                                        contentDescription = null
+                                    )
+                                }
+                                IconButton(
+                                    modifier = Modifier.size(45.dp)
+                                        .align(Alignment.CenterEnd),
+                                    onClick = {
+                                        galleryLauncher.launch("image/*")
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.photo_fill),
                                         contentDescription = null,
+                                        modifier = Modifier.size(35.dp),
                                         tint = androidx.compose.ui.graphics.Color.White
                                     )
                                 }
-                            ) {
-                                cameraController.takePicture(
-                                    ContextCompat.getMainExecutor(context),
-                                    object : ImageCapture.OnImageCapturedCallback() {
-                                        override fun onCaptureSuccess(image: ImageProxy) {
-                                            super.onCaptureSuccess(image)
-                                            val bitmap = image.toBitmap()
-                                                .toRotates(image.imageInfo.rotationDegrees.toFloat())
-                                            imageCash.value = bitmap
-                                            isPhotoTaking.value = true
-                                            image.close()
-                                        }
-                                    }
-                                )
                             }
                         } else {
                             CustomButton(
