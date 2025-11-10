@@ -5,11 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,7 +22,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.checklearn.R
+import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.QuestionItem
 import com.example.checklearn.components.SideBarMenu
@@ -60,7 +62,7 @@ fun TestScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Menu,
+                        painter = painterResource(R.drawable.menu),
                         contentDescription = null,
                         tint = androidx.compose.ui.graphics.Color.Black
                     )
@@ -90,6 +92,13 @@ fun TestScreen(
                     LoadingState.Success -> {
                         answer.value.forEachIndexed { index, question ->
                             QuestionItem(index+1 ,question)
+                        }
+                        CustomButton(
+                            color = ButtonDefaults.buttonColors(Color.White),
+                            text = "Завершить",
+                            textColor = BlueMainColor
+                        ) {
+
                         }
                     }
 

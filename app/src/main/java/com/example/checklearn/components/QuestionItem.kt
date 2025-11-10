@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,9 +32,10 @@ fun QuestionItem(
     number: Int,
     question: Question
 ) {
+    val selectedOption = remember { mutableStateOf<String?>(null) }
     Column(
         modifier = Modifier.fillMaxWidth()
-            .background(BlueMainColor, RoundedCornerShape(16.dp))
+            .background(BlueMainColor, RoundedCornerShape(8.dp))
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         horizontalAlignment = Alignment.Start
@@ -46,9 +51,13 @@ fun QuestionItem(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(7.dp)
                 ) {
-                    Box(modifier = Modifier
-                        .size(15.dp)
-                        .border(width = 1.dp, color = Color.Black, shape = RectangleShape))
+                   RadioButton(
+                       selected = selectedOption.value == it,
+                       onClick = {
+                           selectedOption.value = it
+                       },
+                       colors = RadioButtonDefaults.colors(unselectedColor = Color.White, selectedColor = Color.White)
+                   )
                     Text(
                         text = it,
                         fontSize = 16.sp,
