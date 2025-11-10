@@ -1,5 +1,7 @@
 package com.example.checklearn
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,9 +17,11 @@ import com.example.checklearn.navigation.AppNavigation
 import com.example.checklearn.ui.theme.CheckLearnTheme
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContent {
             CheckLearnTheme {
                     AppNavigation()
