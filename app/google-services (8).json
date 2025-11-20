@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "613086017505",
+    "project_id": "checklearn-6aff4",
+    "storage_bucket": "checklearn-6aff4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613086017505:android:88e7cfdaaa431ff75b04a0",
+        "android_client_info": {
+          "package_name": "com.example.checklearn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4ZHKjGkvePzqTlpgSLOg257nI5elx8Hw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
