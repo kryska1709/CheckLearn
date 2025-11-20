@@ -33,6 +33,7 @@ import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Routes
 import com.example.checklearn.network.HandwriteRecognizer
 import com.example.checklearn.ui.theme.BlueMainColor
+import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
 import com.example.checklearn.viewmodel.TaskViewModel
@@ -100,7 +101,7 @@ fun StatisticScreen(
             )
             CustomButton(
                 modifier = Modifier.padding(8.dp),
-                color = ButtonDefaults.buttonColors(BlueMainColor),
+                color = ButtonDefaults.buttonColors(ContrastBlu),
                 text = "Сгенерировать тест",
                 textColor = Color.White
             ) {

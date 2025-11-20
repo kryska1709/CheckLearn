@@ -1,5 +1,7 @@
 package com.example.checklearn.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -31,6 +33,7 @@ class Navigator(){
 }
 
 val LocalNavigator = staticCompositionLocalOf<Navigator> { error("NO NAVIGATOR") }
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun AppNavigation() {
 
