@@ -40,7 +40,7 @@ fun CustomInfoCard(
             .clickable{expended.value = !expended.value}
             .animateContentSize()
             .padding(start = 8.dp, end = 8.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(ContrastBlu),
     ) {
         Column(modifier = Modifier
@@ -67,7 +67,7 @@ fun CustomInfoCard(
                 }
             }
             if(expended.value) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = description,
                     color = Color.White
