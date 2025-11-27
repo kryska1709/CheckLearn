@@ -3,6 +3,7 @@ package com.example.checklearn.data
 import com.example.checklearn.data.core.ClientCore
 import com.example.checklearn.model.BodyResponse
 import com.example.checklearn.model.PartsResponse
+import com.example.checklearn.model.Question
 import com.example.checklearn.model.TextResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -66,10 +67,3 @@ data class TestResponse(
     val questions: List<Question>
 )
 
-@Serializable
-data class Question(
-    val question: String,
-    val options: List<String>,
-    @SerialName("correct_answer")
-    val correctAnswer: Int
-)

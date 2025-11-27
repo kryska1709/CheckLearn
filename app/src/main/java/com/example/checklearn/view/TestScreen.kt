@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
@@ -31,6 +33,7 @@ import com.example.checklearn.components.QuestionItem
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.LoadingState
 import com.example.checklearn.ui.theme.BlueMainColor
+import com.example.checklearn.ui.theme.ColorButtonFinish
 import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
@@ -91,15 +94,52 @@ fun TestScreen(
                     }
 
                     LoadingState.Success -> {
+                        val selected = TaskViewModel().selectedAnswer.collectAsState()
                         answer.value.forEachIndexed { index, question ->
-                            QuestionItem(index+1 ,question)
+                            QuestionItem(index+1, question, selected.value.getOrNull(index)){optionIndex ->
+                                taskViewModel.selectAnswer(index, optionIndex)
+                            }
                         }
                         CustomButton(
                             color = ButtonDefaults.buttonColors(Color.White),
                             text = "Завершить",
                             textColor = ContrastBlu
                         ) {
-
+                            taskViewModel.finishTest()
+                        }
+                        val result = taskViewModel.result.collectAsState()
+                        result.value?.let { correct ->
+                            AlertDialog(
+                                onDismissRequest = {},
+                                confirmButton = {
+                                    CustomButton(
+                                        text = "OK",
+                                        color = ButtonDefaults.buttonColors(ColorButtonFinish),
+                                        textColor = Color.White
+                                    ) {
+                                    }},
+                                title = {
+                                    Text(
+                                        text = "Ваши результаты",
+                                        fontSize = 20.sp,
+                                        color = Color.Black
+                                    )
+                                },
+                                text = {
+                                    Column(
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        Text(
+                                            text = "Правильных ответов",
+                                            fontSize = 16.sp,
+                                            color = Color.Black
+                                        )
+                                        Text(
+                                            text = "$correct из ${answer.value.size}"
+                                        )
+                                    }
+                                }
+                            )
                         }
                     }
 
