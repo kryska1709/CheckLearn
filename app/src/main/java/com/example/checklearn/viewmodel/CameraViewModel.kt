@@ -18,7 +18,7 @@ class CameraViewModel() : ViewModel() {
 
     fun saveImage(image: Bitmap){
         _image.value = image
-        Log.i("бульбуль", image.toString())
+        Log.i("фото загружено", image.toString())
     }
 
     fun updateText(text: String){

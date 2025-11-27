@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -39,7 +41,10 @@ import com.example.checklearn.R
 import com.example.checklearn.model.SideBarModel
 import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Routes
+import com.example.checklearn.network.AuthRepository
 import com.example.checklearn.ui.theme.MyGray
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
 @Composable
@@ -75,20 +80,24 @@ fun SideBarMenu(
                         .background(MyGray)
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.blabla),
+                        painter = painterResource(R.drawable.icon_check_learn),
                         contentDescription = null
                     )
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth()
                             .padding(start = 20.dp, top = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
                         horizontalAlignment = Alignment.Start
                     ) {
                         items(routes){
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .clickable { navigator.navigate(it.route) }
+                                    .padding(10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.clickable{navigator.navigate(it.route)}
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
                             ){
                                 Text(text = it.title,
                                     fontSize = 20.sp)
@@ -98,17 +107,6 @@ fun SideBarMenu(
                                     modifier = Modifier.size(22.dp))
                             }
                         }
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    TextButton(
-                        modifier = Modifier.padding(bottom = 24.dp, start= 20.dp),
-                        onClick = {}
-                    ) {
-                        Text(
-                            text = "Выйти из аккаунта",
-                            color = Color.Red,
-                            fontSize = 20.sp
-                        )
                     }
                 }
             }

@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.example.checklearn"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
 
-    implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
+    implementation(platform(libs.firebase.bom))
     //camera
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
@@ -65,8 +65,10 @@ dependencies {
 
     implementation(libs.coil.compose)
 
-    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation(libs.kotlinx.coroutines.play.services)
+
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
 
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.client.android)

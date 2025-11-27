@@ -31,6 +31,7 @@ import com.example.checklearn.components.QuestionItem
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.LoadingState
 import com.example.checklearn.ui.theme.BlueMainColor
+import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
 import com.example.checklearn.viewmodel.TaskViewModel
@@ -96,7 +97,7 @@ fun TestScreen(
                         CustomButton(
                             color = ButtonDefaults.buttonColors(Color.White),
                             text = "Завершить",
-                            textColor = BlueMainColor
+                            textColor = ContrastBlu
                         ) {
 
                         }
