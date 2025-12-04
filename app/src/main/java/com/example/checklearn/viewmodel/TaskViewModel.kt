@@ -57,11 +57,25 @@ class TaskViewModel(): ViewModel() {
                 correct++
             }
         }
+        _result.value = correct
     }
 
     fun updateLoadingState(loadingState: LoadingState){
         viewModelScope.launch {
             _loadingState.value = loadingState
+        }
+    }
+
+    fun scoreCalculation(
+        correctAnswer: Int,
+        allAnswer: Int
+    ) : Int{
+        val result = (correctAnswer.toFloat()/allAnswer*100).toInt()
+        return when{
+            result < 50 -> 2
+            result in 50..<70 -> 3
+            result in 70..85 -> 4
+            else -> 5
         }
     }
 }

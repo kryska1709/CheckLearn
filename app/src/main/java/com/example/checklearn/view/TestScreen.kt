@@ -94,7 +94,7 @@ fun TestScreen(
                     }
 
                     LoadingState.Success -> {
-                        val selected = TaskViewModel().selectedAnswer.collectAsState()
+                        val selected = taskViewModel.selectedAnswer.collectAsState()
                         answer.value.forEachIndexed { index, question ->
                             QuestionItem(index+1, question, selected.value.getOrNull(index)){optionIndex ->
                                 taskViewModel.selectAnswer(index, optionIndex)
@@ -109,20 +109,35 @@ fun TestScreen(
                         }
                         val result = taskViewModel.result.collectAsState()
                         result.value?.let { correct ->
+                            val grade = taskViewModel.scoreCalculation(correct,answer.value.size)
+                            val gradeColor = when (grade) {
+                                5 -> Color(0xFF4CAF50)
+                                4 -> Color(0xFF2196F3)
+                                3 -> Color(0xFFFFC107)
+                                else -> Color(0xFFF44336)
+                            }
+
+                            val gradeText = when (grade) {
+                                5 -> "Отличный результат!"
+                                4 -> "Хорошая работа!"
+                                3 -> "Неплохо, но есть куда расти"
+                                else -> "Попробуйте ещё раз — вы сможете!"
+                            }
                             AlertDialog(
+                                containerColor = Color.White,
                                 onDismissRequest = {},
                                 confirmButton = {
                                     CustomButton(
                                         text = "OK",
-                                        color = ButtonDefaults.buttonColors(ColorButtonFinish),
+                                        color = ButtonDefaults.buttonColors(ContrastBlu),
                                         textColor = Color.White
                                     ) {
                                     }},
                                 title = {
                                     Text(
-                                        text = "Ваши результаты",
-                                        fontSize = 20.sp,
-                                        color = Color.Black
+                                        text = "Ваша оценка : $grade",
+                                        color = gradeColor,
+                                        fontSize = 20.sp
                                     )
                                 },
                                 text = {
@@ -135,7 +150,8 @@ fun TestScreen(
                                             color = Color.Black
                                         )
                                         Text(
-                                            text = "$correct из ${answer.value.size}"
+                                            text = "$correct из ${answer.value.size}",
+                                            color = Color.Black
                                         )
                                     }
                                 }
