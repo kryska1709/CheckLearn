@@ -23,6 +23,9 @@ class TaskViewModel(): ViewModel() {
     private val _result = MutableStateFlow<Int?>(null)
     val result = _result.asStateFlow()
 
+    private val _testFinished = MutableStateFlow<Boolean>(false)
+    val testFinished = _testFinished.asStateFlow()
+
     fun generateContent(
         text: String
     ){
@@ -58,6 +61,7 @@ class TaskViewModel(): ViewModel() {
             }
         }
         _result.value = correct
+        _testFinished.value = true
     }
 
     fun updateLoadingState(loadingState: LoadingState){

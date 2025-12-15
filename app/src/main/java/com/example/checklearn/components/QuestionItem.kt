@@ -18,13 +18,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.checklearn.model.Question
+import com.example.checklearn.ui.theme.AccentColor
+import com.example.checklearn.ui.theme.AccentCorrect
 import com.example.checklearn.ui.theme.BlueMainColor
+import com.example.checklearn.ui.theme.CorrectedAnswer
 
 @Composable
 fun QuestionItem(
     index: Int,
     question: Question,
     selected: Int?,
+    testFinished: Boolean,
     onSelect: (Int) -> Unit
 ) {
     Column(
@@ -40,24 +44,33 @@ fun QuestionItem(
                 color = Color.White
             )
             question.options.forEachIndexed { index, option ->
+                val isCorrect = index == question.correctAnswer
+                val isSelected = index == selected
+                val questionColor =
+                    when{
+                        testFinished && isCorrect -> CorrectedAnswer
+                        testFinished && isSelected && !isCorrect -> AccentCorrect
+                        else -> Color.White
+                    }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable{onSelect(index)},
+                        .clickable(enabled = !testFinished){onSelect(index)},
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(7.dp)
                 ) {
                    RadioButton(
                        selected = selected == index,
+                       enabled = !testFinished,
                        onClick = {
                            onSelect(index)
                        },
-                       colors = RadioButtonDefaults.colors(unselectedColor = Color.White, selectedColor = Color.White)
+                       colors = RadioButtonDefaults.colors(unselectedColor = Color.White, selectedColor = questionColor)
                    )
                     Text(
                         text = option,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = questionColor
                     )
                 }
             }

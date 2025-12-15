@@ -83,7 +83,7 @@ fun HistoryScreen(
                     )
                     CustomButton(
                         text = "Авторизоваться",
-                        textColor = Color.Black,
+                        textColor = Color.White,
                         color = ButtonDefaults.buttonColors(ContrastBlu),
                     ) {
                         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
