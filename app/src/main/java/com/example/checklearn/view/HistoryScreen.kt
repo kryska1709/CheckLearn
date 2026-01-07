@@ -79,7 +79,8 @@ fun HistoryScreen(
             ) {
                 if (user.value == null) {
                     Text(
-                        text = "Пользователь не авторизован"
+                        text = "Пользователь не авторизован",
+                        color = Color.Black
                     )
                     CustomButton(
                         text = "Авторизоваться",

@@ -20,7 +20,7 @@ class GeminiService {
     ): BodyRequest{
         val response = client.post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent"){
             headers{
-                append("x-goog-api-key", "AIzaSyCQFzadZ2tLaMGEf1TxSTcQVlRwR4-m7yE") //по документации хэдэры. 1 токен авторизации
+                append("x-goog-api-key", "AIzaSyBRKZT86W0n8TI8_QyS0bR00jiwuqXmjBk") //по документации хэдэры. 1 токен авторизации
                 append(HttpHeaders.ContentType, ContentType.Application.Json) //2. тип контента с которым работаем
             }
             setBody(bodyResponse) //тело запроса по дата классу
