@@ -194,7 +194,10 @@ fun TestScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(text = "Произошла ошибка")
+                            Text(
+                                text = "Произошла ошибка",
+                                color = Color.Black
+                            )
                             Button(
                                 colors = ButtonDefaults.buttonColors(Color.Red.copy(0.7f)),
                                 onClick = {

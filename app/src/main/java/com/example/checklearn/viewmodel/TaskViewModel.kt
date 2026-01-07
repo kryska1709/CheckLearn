@@ -4,13 +4,18 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.checklearn.data.TestManager
+import com.example.checklearn.data.TestRepository
 import com.example.checklearn.model.LoadingState
 import com.example.checklearn.model.Question
+import com.example.checklearn.model.QuestionResult
+import com.example.checklearn.model.TestResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class TaskViewModel(): ViewModel() {
+class TaskViewModel(
+    private val repository: TestRepository = TestRepository()
+): ViewModel() {
     private val _answer = MutableStateFlow<List<Question>>(listOf())
     val answer = _answer.asStateFlow()
 
@@ -25,7 +30,6 @@ class TaskViewModel(): ViewModel() {
 
     private val _testFinished = MutableStateFlow<Boolean>(false)
     val testFinished = _testFinished.asStateFlow()
-
     fun generateContent(
         text: String
     ){
@@ -80,6 +84,31 @@ class TaskViewModel(): ViewModel() {
             result in 50..<70 -> 3
             result in 70..85 -> 4
             else -> 5
+        }
+    }
+
+    fun saveTest(){
+        viewModelScope.launch {
+            val questions = _answer.value
+            val selected = _selectedAnswers.value
+            val correct = _result.value ?: return@launch
+            val testResult = TestResult(
+                totalQuestions = questions.size,
+                correctAnswers = correct,
+                grade = scoreCalculation(correct, questions.size),
+                questions = questions.mapIndexed { index, question ->
+                    QuestionResult(
+                        question = question.question,
+                        selectedAnswer = selected[index],
+                        correctAnswer = question.correctAnswer
+                    )
+                }
+            )
+            try {
+                repository.saveTest(testResult)
+            } catch (e: Exception){
+                Log.e("error history",e.toString())
+            }
         }
     }
 }
