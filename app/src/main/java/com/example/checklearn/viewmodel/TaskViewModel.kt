@@ -12,6 +12,10 @@ import com.example.checklearn.model.TestResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class TaskViewModel(
     private val repository: TestRepository = TestRepository()
@@ -93,6 +97,7 @@ class TaskViewModel(
             val selected = _selectedAnswers.value
             val correct = _result.value ?: return@launch
             val testResult = TestResult(
+                date = convertMillisToDate(Calendar.getInstance().timeInMillis),
                 totalQuestions = questions.size,
                 correctAnswers = correct,
                 grade = scoreCalculation(correct, questions.size),
@@ -110,5 +115,19 @@ class TaskViewModel(
                 Log.e("error history",e.toString())
             }
         }
+    }
+
+    fun clearTest(){
+        _answer.value = listOf()
+        _selectedAnswers.value = emptyList()
+        _result.value = null
+        _testFinished.value = false
+    }
+
+    private fun convertMillisToDate(
+        millis: Long,
+    ): String{
+        val formatter = SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault())
+        return formatter.format(Date(millis))
     }
 }

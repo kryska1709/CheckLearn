@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TestResult(
-    val date: String = FieldValue.serverTimestamp().toString(),
+    val date: String = "",
     val totalQuestions: Int = 0,
     val correctAnswers: Int = 0,
     val grade: Int = 0,

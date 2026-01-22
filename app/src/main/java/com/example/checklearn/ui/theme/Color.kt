@@ -19,3 +19,4 @@ val AccentCorrect = Color(0xFFE386FF)
 val CorrectedAnswer = Color(0xFFB4FFD1)
 
 val Gray2 = Color(0xFFC4C4C4)
+ val Gray3 = Color(0xFF7C7C7C)

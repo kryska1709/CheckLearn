@@ -29,6 +29,7 @@ import com.example.checklearn.network.rememberFirebaseAuthLauncher
 import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.AuthViewModel
+import com.example.checklearn.viewmodel.HistoryViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
@@ -37,7 +38,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HistoryScreen(
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    historyViewModel: HistoryViewModel
 ) {
 
     val user = authViewModel.user.collectAsState()
@@ -52,6 +54,7 @@ fun HistoryScreen(
     val token = stringResource(R.string.web_client_id)
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val history = historyViewModel.history.collectAsState()
     SideBarMenu { drawerState ->
         CustomScaffold(
             title = "История запросов",
@@ -95,22 +98,26 @@ fun HistoryScreen(
                         launcher.launch(googleSignInClient.signInIntent)
                     }
                 } else {
-                    Text(
-                        text = "Вы авторизованы)))))))",
-                        color = Color.Black
-                    )
-                    TextButton(
-                        modifier = Modifier.padding(bottom = 24.dp, start= 20.dp),
-                        onClick = {
-                            Firebase.auth.signOut()
-
-                        }
-                    ) {
+                    if (history.value.isNotEmpty()) {
+                        Text(text = history.value.toString(), color = Color.Black)
+                    } else {
                         Text(
-                            text = "Выйти из аккаунта",
-                            color = Color.Red,
-                            fontSize = 20.sp
+                            text = "Вы авторизованы)))))))",
+                            color = Color.Black
                         )
+                        TextButton(
+                            modifier = Modifier.padding(bottom = 24.dp, start = 20.dp),
+                            onClick = {
+                                Firebase.auth.signOut()
+
+                            }
+                        ) {
+                            Text(
+                                text = "Выйти из аккаунта",
+                                color = Color.Red,
+                                fontSize = 20.sp
+                            )
+                        }
                     }
                 }
             }

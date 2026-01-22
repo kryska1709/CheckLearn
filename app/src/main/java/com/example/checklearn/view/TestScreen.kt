@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +43,7 @@ import com.example.checklearn.ui.theme.AccentColor
 import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.Gray2
+import com.example.checklearn.ui.theme.Gray3
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
 import com.example.checklearn.viewmodel.TaskViewModel
@@ -63,6 +65,11 @@ fun TestScreen(
     LaunchedEffect(Unit) {
         taskViewModel.updateLoadingState(LoadingState.Loading)
         taskViewModel.generateContent(cameraViewModel.text.value.toString())
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            taskViewModel.clearTest()
+        }
     }
     SideBarMenu { drawerState ->
         CustomScaffold(
@@ -121,6 +128,15 @@ fun TestScreen(
                                 taskViewModel.finishTest()
                             }
                         }
+                        if(testFinished.value){
+                            CustomButton(
+                                color = ButtonDefaults.buttonColors(Gray2),
+                                text = "Перейти к камере",
+                                textColor = Color.White
+                            ) {
+                                navigator.navigate(Routes.CAMERA)
+                            }
+                        }
                         val result = taskViewModel.result.collectAsState()
 
                         if(result.value != null && showDialog.value) {
@@ -155,7 +171,7 @@ fun TestScreen(
                                             modifier = Modifier.weight(1f)
                                         ) {
                                             showDialog.value = false
-                                            navigator.navigate(Routes.CAMERA)
+                                            taskViewModel.saveTest()
                                         }
                                     }
                                 },
@@ -180,8 +196,8 @@ fun TestScreen(
                                             color = Color.Black
                                         )
                                         Text(
-                                            text = "Перейти к камере",
-                                            color = Color.LightGray
+                                            text = "Сохранить результаты?",
+                                            color = Gray3
                                         )
                                     }
                                 }
