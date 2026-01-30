@@ -20,3 +20,6 @@ val CorrectedAnswer = Color(0xFFB4FFD1)
 
 val Gray2 = Color(0xFFC4C4C4)
  val Gray3 = Color(0xFF7C7C7C)
+
+val TrueAnswer = Color(0xFF4CAF50)
+ val ErrorAnswer = Color(0xFFF44336)

@@ -1,6 +1,5 @@
 package com.example.checklearn.model
 
-import com.google.firebase.firestore.FieldValue
 import kotlinx.serialization.Serializable
 
 @Serializable

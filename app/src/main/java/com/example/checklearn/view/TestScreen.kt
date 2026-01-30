@@ -39,6 +39,7 @@ import com.example.checklearn.model.LoadingState
 import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Navigator
 import com.example.checklearn.navigation.Routes
+import com.example.checklearn.network.getColorByGrade
 import com.example.checklearn.ui.theme.AccentColor
 import com.example.checklearn.ui.theme.BlueMainColor
 import com.example.checklearn.ui.theme.ContrastBlu
@@ -141,12 +142,6 @@ fun TestScreen(
 
                         if(result.value != null && showDialog.value) {
                             val grade = taskViewModel.scoreCalculation(result.value!!,answer.value.size)
-                            val gradeColor = when (grade) {
-                                5 -> Color(0xFF4CAF50)
-                                4 -> Color(0xFF2196F3)
-                                3 -> Color(0xFFFFC107)
-                                else -> Color(0xFFF44336)
-                            }
 
                             AlertDialog(
                                 containerColor = Color.White,
@@ -178,7 +173,7 @@ fun TestScreen(
                                 title = {
                                     Text(
                                         text = "Ваша оценка : $grade",
-                                        color = gradeColor,
+                                        color = getColorByGrade(grade),
                                         fontSize = 20.sp
                                     )
                                 },
