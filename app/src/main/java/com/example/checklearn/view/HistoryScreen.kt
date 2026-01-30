@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
+import com.example.checklearn.components.HistoryItem
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.network.rememberFirebaseAuthLauncher
 import com.example.checklearn.ui.theme.ContrastBlu
@@ -32,6 +35,7 @@ import com.example.checklearn.viewmodel.AuthViewModel
 import com.example.checklearn.viewmodel.HistoryViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.api.ResourceDescriptor
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
@@ -73,10 +77,11 @@ fun HistoryScreen(
                     )
                 }
             }
-        ) {
+        ) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
-                    .background(MyGray),
+                    .background(MyGray)
+                    .padding(innerPadding),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -99,7 +104,16 @@ fun HistoryScreen(
                     }
                 } else {
                     if (history.value.isNotEmpty()) {
-                        Text(text = history.value.toString(), color = Color.Black)
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            items(history.value){
+                                HistoryItem(it)
+                            }
+                        }
                     } else {
                         Text(
                             text = "Вы авторизованы)))))))",
