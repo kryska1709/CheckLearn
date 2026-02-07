@@ -31,10 +31,8 @@ import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.LoadingState
 import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Routes
-import com.example.checklearn.network.HandwriteRecognizer
+import com.example.checklearn.data.HandwriteRecognizer
 import com.example.checklearn.ui.theme.AccentColor
-import com.example.checklearn.ui.theme.BlueMainColor
-import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.CameraViewModel
 import com.example.checklearn.viewmodel.TaskViewModel

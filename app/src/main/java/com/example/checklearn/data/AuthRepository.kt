@@ -1,6 +1,5 @@
-package com.example.checklearn.network
+package com.example.checklearn.data
 
-import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.ManagedActivityResultLauncher

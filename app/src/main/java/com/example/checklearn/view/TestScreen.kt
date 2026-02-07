@@ -37,12 +37,10 @@ import com.example.checklearn.components.QuestionItem
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.LoadingState
 import com.example.checklearn.navigation.LocalNavigator
-import com.example.checklearn.navigation.Navigator
 import com.example.checklearn.navigation.Routes
-import com.example.checklearn.network.getColorByGrade
+import com.example.checklearn.data.getColorByGrade
 import com.example.checklearn.ui.theme.AccentColor
 import com.example.checklearn.ui.theme.BlueMainColor
-import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.Gray2
 import com.example.checklearn.ui.theme.Gray3
 import com.example.checklearn.ui.theme.MyGray

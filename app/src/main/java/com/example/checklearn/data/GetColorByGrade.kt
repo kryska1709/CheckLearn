@@ -1,4 +1,4 @@
-package com.example.checklearn.network
+package com.example.checklearn.data
 
 import androidx.compose.ui.graphics.Color
 
