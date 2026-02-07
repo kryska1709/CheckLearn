@@ -28,14 +28,13 @@ import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.HistoryItem
 import com.example.checklearn.components.SideBarMenu
-import com.example.checklearn.network.rememberFirebaseAuthLauncher
+import com.example.checklearn.data.rememberFirebaseAuthLauncher
 import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.AuthViewModel
 import com.example.checklearn.viewmodel.HistoryViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.api.ResourceDescriptor
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
@@ -113,24 +112,6 @@ fun HistoryScreen(
                             items(history.value){
                                 HistoryItem(it)
                             }
-                        }
-                    } else {
-                        Text(
-                            text = "Вы авторизованы)))))))",
-                            color = Color.Black
-                        )
-                        TextButton(
-                            modifier = Modifier.padding(bottom = 24.dp, start = 20.dp),
-                            onClick = {
-                                Firebase.auth.signOut()
-
-                            }
-                        ) {
-                            Text(
-                                text = "Выйти из аккаунта",
-                                color = Color.Red,
-                                fontSize = 20.sp
-                            )
                         }
                     }
                 }

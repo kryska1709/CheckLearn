@@ -20,6 +20,7 @@ import com.example.checklearn.view.TestScreen
 import com.example.checklearn.viewmodel.AuthViewModel
 import com.example.checklearn.viewmodel.CameraViewModel
 import com.example.checklearn.viewmodel.HistoryViewModel
+import com.example.checklearn.viewmodel.ProfileViewModel
 import com.example.checklearn.viewmodel.TaskViewModel
 
 class Navigator(){
@@ -46,6 +47,7 @@ fun AppNavigation() {
     val taskViewModel: TaskViewModel = viewModel<TaskViewModel>()
     val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
     val historyViewModel: HistoryViewModel = viewModel<HistoryViewModel>()
+    val profileViewModel: ProfileViewModel = viewModel<ProfileViewModel>()
 
     CompositionLocalProvider(LocalNavigator provides navigator) {
         NavHost(

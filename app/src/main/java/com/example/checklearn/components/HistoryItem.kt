@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.model.TestResult
-import com.example.checklearn.network.getColorByGrade
+import com.example.checklearn.data.getColorByGrade
 import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.ErrorAnswer
 import com.example.checklearn.ui.theme.Gray3

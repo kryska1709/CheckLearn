@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,7 +22,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,10 +38,7 @@ import com.example.checklearn.R
 import com.example.checklearn.model.SideBarModel
 import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Routes
-import com.example.checklearn.network.AuthRepository
 import com.example.checklearn.ui.theme.MyGray
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,7 +50,8 @@ fun SideBarMenu(
     val routes = listOf(
         SideBarModel("Камера", imageId = R.drawable.camera, Routes.CAMERA),
         SideBarModel ("История", imageId = R.drawable.history, Routes.HISTORY),
-        SideBarModel("О приложении", imageId = R.drawable.info_circle, Routes.INFO)
+        SideBarModel("О приложении", imageId = R.drawable.info_circle, Routes.INFO),
+        SideBarModel("Профиль", imageId = R.drawable.person_crop_circle__1_, Routes.PROFILE)
     )
     val configuration = LocalConfiguration.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

@@ -3,7 +3,7 @@ package com.example.checklearn.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.checklearn.model.AuthState
-import com.example.checklearn.network.AuthRepository
+import com.example.checklearn.data.AuthRepository
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
