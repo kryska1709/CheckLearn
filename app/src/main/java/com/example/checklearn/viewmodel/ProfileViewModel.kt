@@ -8,10 +8,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
+class ProfileViewModel(private val repository: ProfileRepository = ProfileRepository()) : ViewModel() {
     private val _profile = MutableStateFlow<UserProfile?>(null)
     val profile = _profile.asStateFlow()
 
+    init {
+        getUserProfile()
+    }
     fun saveUserProfile(profile: UserProfile){
         viewModelScope.launch {
             repository.saveUserProfile(profile)
