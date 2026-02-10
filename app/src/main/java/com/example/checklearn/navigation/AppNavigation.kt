@@ -12,11 +12,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.checklearn.Util.HistoryViewModelFactory
 import com.example.checklearn.view.CameraScreen
 import com.example.checklearn.view.HistoryScreen
 import com.example.checklearn.view.InfoScreen
 import com.example.checklearn.view.StatisticScreen
 import com.example.checklearn.view.TestScreen
+import com.example.checklearn.view.UserProfileScreen
 import com.example.checklearn.viewmodel.AuthViewModel
 import com.example.checklearn.viewmodel.CameraViewModel
 import com.example.checklearn.viewmodel.HistoryViewModel
@@ -46,9 +48,10 @@ fun AppNavigation() {
     val cameraViewModel: CameraViewModel = viewModel<CameraViewModel>()
     val taskViewModel: TaskViewModel = viewModel<TaskViewModel>()
     val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
-    val historyViewModel: HistoryViewModel = viewModel<HistoryViewModel>()
     val profileViewModel: ProfileViewModel = viewModel<ProfileViewModel>()
-
+    val historyViewModel: HistoryViewModel = viewModel<HistoryViewModel>(
+        factory = HistoryViewModelFactory(authViewModel, profileViewModel)
+    )
     CompositionLocalProvider(LocalNavigator provides navigator) {
         NavHost(
             navController = navController,
@@ -64,10 +67,13 @@ fun AppNavigation() {
                 TestScreen(taskViewModel, cameraViewModel)
             }
             composable(Routes.HISTORY) {
-                HistoryScreen(authViewModel,historyViewModel)
+                HistoryScreen(authViewModel,historyViewModel,profileViewModel)
             }
             composable(Routes.INFO){
                 InfoScreen()
+            }
+            composable(Routes.PROFILE) {
+                UserProfileScreen(profileViewModel)
             }
         }
     }
