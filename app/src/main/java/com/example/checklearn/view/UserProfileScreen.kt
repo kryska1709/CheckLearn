@@ -1,5 +1,6 @@
 package com.example.checklearn.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,22 +13,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.checklearn.viewmodel.AuthViewModel
 import com.example.checklearn.viewmodel.ProfileViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 @Composable
 fun UserProfileScreen(
+    authViewModel: AuthViewModel,
     profileViewModel: ProfileViewModel
 ) {
     val profileInfo = profileViewModel.profile.collectAsState()
+    val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize()
             .background(Color.White),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         profileInfo.value?.let {
@@ -49,7 +54,8 @@ fun UserProfileScreen(
         TextButton(
             modifier = Modifier.padding(bottom = 24.dp, start = 20.dp),
             onClick = {
-                Firebase.auth.signOut()
+                authViewModel.signOut()
+                Toast.makeText(context,"вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
             }
         ) {
             Text(
