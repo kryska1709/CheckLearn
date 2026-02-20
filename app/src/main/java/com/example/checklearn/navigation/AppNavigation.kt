@@ -73,7 +73,7 @@ fun AppNavigation() {
                 InfoScreen()
             }
             composable(Routes.PROFILE) {
-                UserProfileScreen(profileViewModel)
+                UserProfileScreen(authViewModel, profileViewModel)
             }
         }
     }
