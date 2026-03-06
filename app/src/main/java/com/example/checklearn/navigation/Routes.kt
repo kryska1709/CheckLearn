@@ -8,14 +8,5 @@ object Routes {
     const val HISTORY = "history"
 
     const val PROFILE = "profile"
-    fun getTitle(routes: String): String{
-        return when(routes){
-            STATISTIC -> "Статистика"
-            TASKS -> "Похожие задачи"
-            HISTORY -> "История запросов"
-            INFO -> "О приложении"
-            PROFILE -> "Профиль"
-            else -> ""
-        }
-    }
+    const val TEACHER = "teacher"
 }

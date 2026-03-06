@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.model.SideBarModel
+import com.example.checklearn.navigation.LocalIsTeacher
 import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Routes
 import com.example.checklearn.ui.theme.MyGray
@@ -46,13 +47,17 @@ fun SideBarMenu(
     action: @Composable (DrawerState) -> Unit
 ) {
     val navigator = LocalNavigator.current
+    val isTeacher = LocalIsTeacher.current
     val scope = rememberCoroutineScope()
-    val routes = listOf(
-        SideBarModel("Камера", imageId = R.drawable.camera, Routes.CAMERA),
-        SideBarModel ("История", imageId = R.drawable.history, Routes.HISTORY),
-        SideBarModel("О приложении", imageId = R.drawable.info_circle, Routes.INFO),
-        SideBarModel("Профиль", imageId = R.drawable.person_crop_circle__1_, Routes.PROFILE)
-    )
+    val routes = buildList {
+        add(SideBarModel("Камера", imageId = R.drawable.camera, Routes.CAMERA))
+        add(SideBarModel("История", imageId = R.drawable.history, Routes.HISTORY))
+        add(SideBarModel("О приложении", imageId = R.drawable.info_circle, Routes.INFO))
+        add(SideBarModel("Профиль", imageId = R.drawable.person_crop_circle__1_, Routes.PROFILE))
+        if (isTeacher){
+            add(SideBarModel("Кабинет учителя", imageId = R.drawable.person_crop_circle__1_, Routes.TEACHER))
+        }
+    }
     val configuration = LocalConfiguration.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val interactionSource = remember { MutableInteractionSource() }

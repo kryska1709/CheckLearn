@@ -4,6 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.ViewModel
@@ -17,6 +20,7 @@ import com.example.checklearn.view.CameraScreen
 import com.example.checklearn.view.HistoryScreen
 import com.example.checklearn.view.InfoScreen
 import com.example.checklearn.view.StatisticScreen
+import com.example.checklearn.view.TeacherScreen
 import com.example.checklearn.view.TestScreen
 import com.example.checklearn.view.UserProfileScreen
 import com.example.checklearn.viewmodel.AuthViewModel
@@ -39,6 +43,7 @@ class Navigator(){
 }
 
 val LocalNavigator = staticCompositionLocalOf<Navigator> { error("NO NAVIGATOR") }
+val LocalIsTeacher = compositionLocalOf { false }
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun AppNavigation() {
@@ -52,7 +57,8 @@ fun AppNavigation() {
     val historyViewModel: HistoryViewModel = viewModel<HistoryViewModel>(
         factory = HistoryViewModelFactory(authViewModel, profileViewModel)
     )
-    CompositionLocalProvider(LocalNavigator provides navigator) {
+    val isTeacher by profileViewModel.profile.collectAsState()
+    CompositionLocalProvider(LocalNavigator provides navigator, LocalIsTeacher provides (isTeacher?.isTeacher?:false)) {
         NavHost(
             navController = navController,
             startDestination = Routes.CAMERA
@@ -74,6 +80,9 @@ fun AppNavigation() {
             }
             composable(Routes.PROFILE) {
                 UserProfileScreen(authViewModel, profileViewModel)
+            }
+            composable(Routes.TEACHER) {
+                TeacherScreen()
             }
         }
     }

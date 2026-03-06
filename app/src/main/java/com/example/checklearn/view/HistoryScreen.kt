@@ -83,7 +83,7 @@ fun HistoryScreen(
                     Icon(
                         painter = painterResource(R.drawable.menu),
                         contentDescription = null,
-                        tint = androidx.compose.ui.graphics.Color.Black
+                        tint = Color.Black
                     )
                 }
             }
