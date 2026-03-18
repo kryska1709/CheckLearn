@@ -1,5 +1,6 @@
 package com.example.checklearn.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,6 +43,7 @@ import com.example.checklearn.navigation.Routes
 import com.example.checklearn.ui.theme.MyGray
 import kotlinx.coroutines.launch
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun SideBarMenu(
     action: @Composable (DrawerState) -> Unit
@@ -55,7 +57,7 @@ fun SideBarMenu(
         add(SideBarModel("О приложении", imageId = R.drawable.info_circle, Routes.INFO))
         add(SideBarModel("Профиль", imageId = R.drawable.person_crop_circle__1_, Routes.PROFILE))
         if (isTeacher){
-            add(SideBarModel("Кабинет учителя", imageId = R.drawable.person_crop_circle__1_, Routes.TEACHER))
+            add(SideBarModel("Кабинет учителя", imageId = R.drawable.graduationcap, Routes.TEACHER))
         }
     }
     val configuration = LocalConfiguration.current
