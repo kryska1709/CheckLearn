@@ -1,8 +1,10 @@
 package com.example.checklearn.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.checklearn.model.QuestionResult
 import com.example.checklearn.model.StudentResult
 import com.example.checklearn.model.StudentResultState
+import com.example.checklearn.model.TestResult
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,7 +47,7 @@ class TeacherViewModel() : ViewModel() {
                                         studentName = studentName,
                                         classRoom = classroom,
                                         testId = it.id,
-                                        testResult = TODO()
+                                        testResult = parseTestResult(it.data)
                                     )
                                 )
                             }
@@ -56,7 +58,36 @@ class TeacherViewModel() : ViewModel() {
                                 )
                             }
                         }
+                        .addOnFailureListener {
+                            count--
+                            if (count == 0){
+                                _resultState.value = StudentResultState.Success(
+                                    allResult
+                                )
+                            }
+                        }
                 }
             }
+            .addOnFailureListener { e ->
+               _resultState.value = StudentResultState.Error(e.message.toString())
+            }
+    }
+    fun parseTestResult(
+        data: Map<String, Any>
+    ): TestResult{
+        @Suppress("UNCHECKED_CAST") val questionList = (data["questions"] as? List<Map<String, Any>>)?.map {
+            QuestionResult(
+                question = it["question"] as? String ?: "",
+                selectedAnswer = (it["selectedAnswer"] as? Long)?.toInt() ?: 0,
+                correctAnswer = (it["correctAnswer"] as? Long)?.toInt() ?: 0
+            )
+        } ?: emptyList()
+        return TestResult(
+            date = data["date"] as? String ?: "",
+            totalQuestions = (data["totalQuestions"] as? Long)?.toInt() ?: 0,
+            correctAnswers = (data["correctAnswer"] as? Long)?.toInt() ?: 0,
+            grade = (data["grade"] as? Long)?.toInt() ?: 0,
+            questions = questionList
+        )
     }
 }

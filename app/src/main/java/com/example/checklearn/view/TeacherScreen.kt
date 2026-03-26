@@ -9,6 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,12 +21,15 @@ import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.CustomTextField
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.ui.theme.MyGray
+import com.example.checklearn.viewmodel.TeacherViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun TeacherScreen() {
+fun TeacherScreen(
+    teacherViewModel: TeacherViewModel
+) {
     val scope = rememberCoroutineScope()
-    val value =
+    val nameGroup = mutableStateOf("")// для поиска по группе
     SideBarMenu { drawerState ->
         CustomScaffold(
             title = "Кабинет Учителя",

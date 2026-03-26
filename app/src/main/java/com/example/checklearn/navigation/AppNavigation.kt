@@ -28,6 +28,7 @@ import com.example.checklearn.viewmodel.CameraViewModel
 import com.example.checklearn.viewmodel.HistoryViewModel
 import com.example.checklearn.viewmodel.ProfileViewModel
 import com.example.checklearn.viewmodel.TaskViewModel
+import com.example.checklearn.viewmodel.TeacherViewModel
 
 class Navigator(){
     private var navController: NavController? = null
@@ -57,6 +58,7 @@ fun AppNavigation() {
     val historyViewModel: HistoryViewModel = viewModel<HistoryViewModel>(
         factory = HistoryViewModelFactory(authViewModel, profileViewModel)
     )
+    val teacherViewModel: TeacherViewModel = viewModel<TeacherViewModel>()
     val isTeacher by profileViewModel.profile.collectAsState()
     CompositionLocalProvider(LocalNavigator provides navigator, LocalIsTeacher provides (isTeacher?.isTeacher?:false)) {
         NavHost(
@@ -82,7 +84,7 @@ fun AppNavigation() {
                 UserProfileScreen(authViewModel, profileViewModel)
             }
             composable(Routes.TEACHER) {
-                TeacherScreen()
+                TeacherScreen(teacherViewModel)
             }
         }
     }
