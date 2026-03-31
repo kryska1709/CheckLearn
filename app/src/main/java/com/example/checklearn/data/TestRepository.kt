@@ -18,10 +18,12 @@ class TestRepository {
         result: TestResult
     ){
         val userId = auth.currentUser?.uid ?: return
-        firestore.collection("users")
+        val doc = firestore.collection("users")
             .document(userId)
             .collection("tests")
-            .add(result).await()
+            .document()
+        val resultWithId = result.copy(id = doc.id)
+        doc.set(resultWithId).await()
     }
     fun getTestHistory(): Flow<List<TestResult>> = callbackFlow{
         val userId = auth.currentUser?.uid?: run {
@@ -35,8 +37,34 @@ class TestRepository {
                     close(error)
                     return@addSnapshotListener
                 }
-                trySend(snapshot?.toObjects(TestResult::class.java) ?: emptyList())
+                val results = snapshot?.documents?.map {
+                    it.toObject(TestResult::class.java)!!.copy(id = it.id)
+                } ?: emptyList()
+                trySend(results)
             }
         awaitClose { listener.remove() }
+    }
+
+    suspend fun deleteTest(
+        testId: String
+    ){
+        val userId = auth.currentUser?.uid ?: return
+        firestore.collection("users")
+            .document(userId)
+            .collection("tests")
+            .document(testId)
+            .delete()
+            .await()
+    }
+
+    suspend fun deleteAllTests(){
+        val userId = auth.currentUser?.uid ?: return
+        val testsCollection = firestore.collection("users")
+            .document(userId)
+            .collection("tests")
+        val documents = testsCollection.get().await()
+        documents.forEach {
+            testsCollection.document(it.id).delete().await()
+        }
     }
 }

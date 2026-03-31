@@ -10,6 +10,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,7 @@ fun TeacherScreen(
     teacherViewModel: TeacherViewModel
 ) {
     val scope = rememberCoroutineScope()
-    val nameGroup = mutableStateOf("")// для поиска по группе
+    val nameGroup = remember {mutableStateOf("")}// для поиска по группе
     SideBarMenu { drawerState ->
         CustomScaffold(
             title = "Кабинет Учителя",

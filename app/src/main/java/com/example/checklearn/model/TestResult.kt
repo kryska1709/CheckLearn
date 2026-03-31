@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TestResult(
+    val id: String = "",
     val date: String = "",
     val totalQuestions: Int = 0,
     val correctAnswers: Int = 0,
