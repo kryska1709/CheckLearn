@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class HistoryViewModel(
     private val testRepository: TestRepository = TestRepository(),
@@ -27,4 +28,17 @@ class HistoryViewModel(
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HistoryUIState.Unauthorized)
 
+    fun deleteTest(
+        testId: String
+    ){
+        viewModelScope.launch {
+            testRepository.deleteTest(testId)
+        }
+    }
+
+    fun deleteAllTest(){
+        viewModelScope.launch {
+            testRepository.deleteAllTests()
+        }
+    }
 }

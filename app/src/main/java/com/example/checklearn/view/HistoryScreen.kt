@@ -1,21 +1,28 @@
 package com.example.checklearn.view
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,8 +59,6 @@ fun HistoryScreen(
     historyViewModel: HistoryViewModel,
     profileViewModel: ProfileViewModel
 ) {
-
-    val user = authViewModel.user.collectAsState()
     val launcher = rememberFirebaseAuthLauncher(
         onAuthComplete = { result ->
             authViewModel.updateUser(result.user)
@@ -153,8 +158,53 @@ fun HistoryScreen(
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            items(history.value){
-                                HistoryItem(it)
+                            items(history.value, key = {it.id}){
+                                val dismissState = rememberSwipeToDismissBoxState(
+                                    confirmValueChange = {value ->
+                                        if (value == SwipeToDismissBoxValue.EndToStart){
+                                            historyViewModel.deleteTest(it.id)
+                                            true
+                                        }
+                                        else false
+                                    }
+                                )
+                                SwipeToDismissBox(
+                                    dismissState,
+                                    enableDismissFromStartToEnd = false,
+                                    backgroundContent = {
+                                        val color by animateColorAsState(
+                                            targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart)
+                                                Color.Red else Color.Transparent,
+                                            label = "swipe_color"
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .background(color, RoundedCornerShape(15.dp))
+                                                .padding(end = 20.dp),
+                                            contentAlignment = Alignment.CenterEnd
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.trash_fill),
+                                                contentDescription = "Удалить",
+                                                tint = Color.Red
+                                            )
+                                        }
+                                    }
+                                ) {
+                                    HistoryItem(it)
+                                }
+                            }
+                            item {
+                                Button(
+                                    colors = ButtonDefaults.buttonColors(Color.Red),
+                                    onClick = { historyViewModel.deleteAllTest() }
+                                ) {
+                                    Text(
+                                        text = "Очистить историю",
+                                        color = Color.White
+                                    )
+                                }
                             }
                         }
                     }
