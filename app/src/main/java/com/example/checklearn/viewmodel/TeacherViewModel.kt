@@ -24,7 +24,7 @@ class TeacherViewModel() : ViewModel() {
         _resultState.value = StudentResultState.Loading
         database.collection("users")
             .whereEqualTo("classRoom",classroom.trim())
-            .whereEqualTo("isTeacher", false)
+//            .whereEqualTo("teacher", false)
             .get()
             .addOnSuccessListener { userDocs ->
                 if (userDocs.isEmpty){
