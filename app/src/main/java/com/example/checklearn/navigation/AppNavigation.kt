@@ -1,6 +1,7 @@
 package com.example.checklearn.navigation
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -9,7 +10,6 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -60,7 +60,7 @@ fun AppNavigation() {
     )
     val teacherViewModel: TeacherViewModel = viewModel<TeacherViewModel>()
     val isTeacher by profileViewModel.profile.collectAsState()
-    CompositionLocalProvider(LocalNavigator provides navigator, LocalIsTeacher provides (isTeacher?.isTeacher?:false)) {
+    CompositionLocalProvider(LocalNavigator provides navigator, LocalIsTeacher provides (isTeacher?.teacher ?:false)) {
         NavHost(
             navController = navController,
             startDestination = Routes.CAMERA
