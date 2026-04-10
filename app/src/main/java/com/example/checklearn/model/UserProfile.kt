@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class UserProfile(
     val fullName: String = "",
     val classRoom: String = "",
-    val isTeacher: Boolean = false
+    val teacher: Boolean = false
 )
