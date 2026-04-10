@@ -1,14 +1,20 @@
 package com.example.checklearn.view
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,6 +27,8 @@ import com.example.checklearn.R
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.CustomTextField
 import com.example.checklearn.components.SideBarMenu
+import com.example.checklearn.model.StudentResultState
+import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
 import com.example.checklearn.viewmodel.TeacherViewModel
 import kotlinx.coroutines.launch
@@ -30,6 +38,7 @@ fun TeacherScreen(
     teacherViewModel: TeacherViewModel
 ) {
     val scope = rememberCoroutineScope()
+    val resultState = teacherViewModel.resultState.collectAsState()
     val nameGroup = remember {mutableStateOf("")}// для поиска по группе
     SideBarMenu { drawerState ->
         CustomScaffold(
@@ -57,13 +66,56 @@ fun TeacherScreen(
         ) { innerPadding ->
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .background(MyGray)
                     .padding(innerPadding)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomTextField(
+                        modifier = Modifier.weight(0.9f),
+                        value = nameGroup.value,
+                        label = "Поиск",
+                        placeholder = "22ит17"
+                    ) {
+                        nameGroup.value = it
+                    }
+                    IconButton(
+                        modifier = Modifier.weight(0.1f),
+                        onClick = {teacherViewModel.searchByClassroom(nameGroup.value)}
+                    ) {
+                        Icon(painter = painterResource(R.drawable.search),
+                            contentDescription = null,
+                            tint = ContrastBlu
+                        )
+                    }
+                }
+                when(resultState.value){
+                    is StudentResultState.Error ->
+                        (resultState.value as StudentResultState.Error).message
+                    StudentResultState.Idle ->
+                        Text(
+                            text = "найдите группу"
+                        )
+                    StudentResultState.Loading ->
+                        Text(
+                            text = "загрузка"
+                        )
+                    is StudentResultState.Success ->
+                    {
+                        (resultState.value as StudentResultState.Success).result.forEach {
+                            Text(text = it.toString(),
+                                color = Color.Black)
+                            Log.i("group", it.toString())
+                        }
+                    }
+                }
             }
         }
     }
