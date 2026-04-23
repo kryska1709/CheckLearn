@@ -20,12 +20,7 @@ class ProfileRepository() {
         firestore.collection("users").document(userId).set(profile).await() //дождаться завершения запроса
     }
 
-    fun getUserProfile(): Flow<UserProfile?> = callbackFlow{//поток для синхронного получения данных при изменениях. возвращает поток данных который автоматически обновляется при измениях
-        val userId = auth.currentUser?.uid?: run {
-            trySend(null)
-            close()
-            return@callbackFlow //колбэк держит связь с файрстор. если не получили получаем null
-        }
+    fun getUserProfile(userId: String): Flow<UserProfile?> = callbackFlow{//поток для синхронного получения данных при изменениях. возвращает поток данных который автоматически обновляется при измениях
         val listener = firestore.collection("users").document(userId)
             .addSnapshotListener { snapshot,error ->
                 if (error!=null){

@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.checklearn.Util.HistoryViewModelFactory
+import com.example.checklearn.Util.ProfileViewModelFactory
 import com.example.checklearn.view.CameraScreen
 import com.example.checklearn.view.HistoryScreen
 import com.example.checklearn.view.InfoScreen
@@ -54,7 +55,9 @@ fun AppNavigation() {
     val cameraViewModel: CameraViewModel = viewModel<CameraViewModel>()
     val taskViewModel: TaskViewModel = viewModel<TaskViewModel>()
     val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
-    val profileViewModel: ProfileViewModel = viewModel<ProfileViewModel>()
+    val profileViewModel: ProfileViewModel = viewModel<ProfileViewModel>(
+        factory = ProfileViewModelFactory(authViewModel)
+    )
     val historyViewModel: HistoryViewModel = viewModel<HistoryViewModel>(
         factory = HistoryViewModelFactory(authViewModel, profileViewModel)
     )

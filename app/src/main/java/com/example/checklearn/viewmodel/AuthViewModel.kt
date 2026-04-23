@@ -1,9 +1,12 @@
 package com.example.checklearn.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.checklearn.model.AuthState
 import com.example.checklearn.data.AuthRepository
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +28,12 @@ class AuthViewModel: ViewModel() {
             _user.value = user
         }
     }
-    fun signOut(){
+    fun signOut(context: Context){
         repository.signOut()
         _user.value=null
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .build()
+        val googleClient = GoogleSignIn.getClient(context,gso)
+        googleClient.signOut()
     }
 }

@@ -115,7 +115,7 @@ fun UserProfileScreen(
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        authViewModel.signOut()
+                        authViewModel.signOut(context)
                         Toast.makeText(context, "вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
                     }
                 ) {
