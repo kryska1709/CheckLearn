@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,22 +25,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.checklearn.R
+import com.example.checklearn.components.CardTeacher
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.CustomTextField
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.StudentResultState
 import com.example.checklearn.ui.theme.ContrastBlu
 import com.example.checklearn.ui.theme.MyGray
+import com.example.checklearn.viewmodel.ProfileViewModel
 import com.example.checklearn.viewmodel.TeacherViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun TeacherScreen(
-    teacherViewModel: TeacherViewModel
+    teacherViewModel: TeacherViewModel,
+    profileViewModel: ProfileViewModel
 ) {
     val scope = rememberCoroutineScope()
     val resultState = teacherViewModel.resultState.collectAsState()
     val nameGroup = remember {mutableStateOf("")}// для поиска по группе
+    val user = profileViewModel.profile.collectAsState()
+    LaunchedEffect(
+        Unit
+    ) {
+        user.value?.teacherClassroom?.first()?.let { teacherViewModel.searchByClassroom(it) }
+    }
     SideBarMenu { drawerState ->
         CustomScaffold(
             title = "Кабинет Учителя",
@@ -97,9 +107,9 @@ fun TeacherScreen(
                         )
                     }
                 }
-                when(resultState.value){
+                when(val state = resultState.value){
                     is StudentResultState.Error ->
-                        (resultState.value as StudentResultState.Error).message
+                        state.message
                     StudentResultState.Idle ->
                         Text(
                             text = "найдите группу"
@@ -110,9 +120,8 @@ fun TeacherScreen(
                         )
                     is StudentResultState.Success ->
                     {
-                        (resultState.value as StudentResultState.Success).result.forEach {
-                            Text(text = it.toString(),
-                                color = Color.Black)
+                        state.result.forEach {
+                            CardTeacher(it)
                             Log.i("group", it.toString())
                         }
                     }
