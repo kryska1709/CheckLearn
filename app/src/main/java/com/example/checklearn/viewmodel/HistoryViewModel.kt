@@ -8,6 +8,8 @@ import com.example.checklearn.model.TestResult
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -16,7 +18,13 @@ class HistoryViewModel(
     private val authViewModel: AuthViewModel,
     private val profileViewModel: ProfileViewModel
 ): ViewModel() {
-    val history:StateFlow<List<TestResult>> = testRepository.getTestHistory()
+    val history:StateFlow<List<TestResult>> = authViewModel.user.flatMapLatest {
+        if (it == null){
+            flowOf(emptyList())
+        } else {
+            testRepository.getTestHistory()
+        }
+    }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),emptyList())
 
     val uiState: StateFlow<HistoryUIState> =

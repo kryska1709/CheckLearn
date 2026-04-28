@@ -87,7 +87,7 @@ fun AppNavigation() {
                 UserProfileScreen(authViewModel, profileViewModel)
             }
             composable(Routes.TEACHER) {
-                TeacherScreen(teacherViewModel)
+                TeacherScreen(teacherViewModel, profileViewModel)
             }
         }
     }

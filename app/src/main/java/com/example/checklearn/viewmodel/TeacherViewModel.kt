@@ -85,7 +85,7 @@ class TeacherViewModel() : ViewModel() {
         return TestResult(
             date = data["date"] as? String ?: "",
             totalQuestions = (data["totalQuestions"] as? Long)?.toInt() ?: 0,
-            correctAnswers = (data["correctAnswer"] as? Long)?.toInt() ?: 0,
+            correctAnswers = (data["correctAnswers"] as? Long)?.toInt() ?: 0,
             grade = (data["grade"] as? Long)?.toInt() ?: 0,
             questions = questionList
         )
