@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
+import com.example.checklearn.components.CustomTextField
 import com.example.checklearn.components.HistoryItem
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.data.rememberFirebaseAuthLauncher
@@ -128,18 +129,16 @@ fun HistoryScreen(
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
-                        TextField(
+                        CustomTextField(
                             value = fullName.value,
-                            label = {Text(text = "ФИО")},
-                            placeholder = {Text(text = "Иванов Иван Иванович")},
-                            colors = TextFieldDefaults.colors(ContrastBlu, unfocusedTextColor = AccentColor),
+                            label =  "ФИО",
+                            placeholder = "Иванов Иван Иванович",
                             onValueChange ={fullName.value = it} ,
                         )
-                        TextField(
+                        CustomTextField(
                             value = classRoom.value,
-                            label = {Text(text = "Класс/Группа")},
-                            placeholder = {Text(text = "22ит17")},
-                            colors = TextFieldDefaults.colors(ContrastBlu, unfocusedTextColor = AccentColor),
+                            label = "Класс/Группа",
+                            placeholder = "22ит17",
                             onValueChange ={classRoom.value = it} ,
                         )
                         CustomButton(

@@ -16,61 +16,18 @@ class TeacherViewModel() : ViewModel() {
 
     fun searchByClassroom(
         classroom: String
-    ){
-        if (classroom.isBlank()){
+    ) {
+        if (classroom.isBlank()) {
             _resultState.value = StudentResultState.Error("Введите номер класса")
             return
         }
-        _resultState.value = StudentResultState.Loading
-        database.collection("users")
-            .whereEqualTo("classRoom",classroom.trim())
-//            .whereEqualTo("teacher", false)
-            .get()
-            .addOnSuccessListener { userDocs ->
-                if (userDocs.isEmpty){
-                    _resultState.value = StudentResultState.Error("Ученики класса $classroom не найдены")
-                    return@addOnSuccessListener
-                }
-                val allResult = mutableListOf<StudentResult>()
-                var count = userDocs.size()
-                userDocs.forEach{
-                    val studentName = it.getString("fullName") ?: "Имя не известно"
-                    val classroom = it.getString("classRoom") ?: "Класс не известен"
-                    database.collection("users")
-                        .document(it.id)
-                        .collection("tests")
-                        .get()
-                        .addOnSuccessListener {  testDocs ->
-                            testDocs.forEach{
-                                allResult.add(
-                                    StudentResult(
-                                        studentName = studentName,
-                                        classRoom = classroom,
-                                        testId = it.id,
-                                        testResult = parseTestResult(it.data)
-                                    )
-                                )
-                            }
-                            count--
-                            if (count == 0){
-                                _resultState.value = StudentResultState.Success(
-                                    allResult
-                                )
-                            }
-                        }
-                        .addOnFailureListener {
-                            count--
-                            if (count == 0){
-                                _resultState.value = StudentResultState.Success(
-                                    allResult
-                                )
-                            }
-                        }
-                }
-            }
-            .addOnFailureListener { e ->
-               _resultState.value = StudentResultState.Error(e.message.toString())
-            }
+        fetchByClassrooms(listOf(classroom.trim()))
+    }
+    fun loadStudentByTeacher(
+        teacherClassroom: List<String>?
+    ){
+        if (teacherClassroom.isNullOrEmpty()) return
+        fetchByClassrooms(teacherClassroom)
     }
     fun parseTestResult(
         data: Map<String, Any>
@@ -90,4 +47,73 @@ class TeacherViewModel() : ViewModel() {
             questions = questionList
         )
     }
+
+    private fun fetchByClassrooms(classrooms: List<String>) {
+        _resultState.value = StudentResultState.Loading
+        val allResult = mutableListOf<StudentResult>()
+        var pendingClasses = classrooms.size
+
+        classrooms.forEach { classroom ->
+            database.collection("users")
+                .whereEqualTo("classRoom", classroom.trim())
+                .get()
+                .addOnSuccessListener { userDocs ->
+                    var pendingUsers = userDocs.size()
+
+                    if (pendingUsers == 0) {
+                        pendingClasses--
+                        if (pendingClasses == 0) {
+                            _resultState.value = StudentResultState.Success(allResult)
+                        }
+                        return@addOnSuccessListener
+                    }
+
+                    userDocs.forEach { userDoc ->
+                        val studentName = userDoc.getString("fullName") ?: "Имя не известно"
+                        val studentClass = userDoc.getString("classRoom") ?: "Класс не известен"
+
+                        database.collection("users")
+                            .document(userDoc.id)
+                            .collection("tests")
+                            .get()
+                            .addOnSuccessListener { testDocs ->
+                                testDocs.forEach { testDoc ->
+                                    allResult.add(
+                                        StudentResult(
+                                            studentName = studentName,
+                                            classRoom = studentClass,
+                                            testId = testDoc.id,
+                                            testResult = parseTestResult(testDoc.data)
+                                        )
+                                    )
+                                }
+                                pendingUsers--
+                                if (pendingUsers == 0) {
+                                    pendingClasses--
+                                    if (pendingClasses == 0) {
+                                        _resultState.value = StudentResultState.Success(allResult)
+                                    }
+                                }
+                            }
+                            .addOnFailureListener {
+                                pendingUsers--
+                                if (pendingUsers == 0) {
+                                    pendingClasses--
+                                    if (pendingClasses == 0) {
+                                        _resultState.value = StudentResultState.Success(allResult)
+                                    }
+                                }
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    pendingClasses--
+                    if (pendingClasses == 0) {
+                        _resultState.value = StudentResultState.Error(e.message.toString())
+                    }
+                }
+        }
+    }
+
+
 }

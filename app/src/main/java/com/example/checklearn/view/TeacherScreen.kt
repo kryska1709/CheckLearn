@@ -46,9 +46,12 @@ fun TeacherScreen(
     val nameGroup = remember {mutableStateOf("")}// для поиска по группе
     val user = profileViewModel.profile.collectAsState()
     LaunchedEffect(
-        Unit
+        user.value
     ) {
-        user.value?.teacherClassroom?.first()?.let { teacherViewModel.searchByClassroom(it) }
+        val teacherClassroom = user.value?.teacherClassroom
+        if(!teacherClassroom.isNullOrEmpty() && nameGroup.value.isEmpty()) {
+            teacherViewModel.loadStudentByTeacher(teacherClassroom)
+        }
     }
     SideBarMenu { drawerState ->
         CustomScaffold(
@@ -112,11 +115,13 @@ fun TeacherScreen(
                         state.message
                     StudentResultState.Idle ->
                         Text(
-                            text = "найдите группу"
+                            text = "найдите группу",
+                            color = Color.Black
                         )
                     StudentResultState.Loading ->
                         Text(
-                            text = "загрузка"
+                            text = "загрузка",
+                            color = Color.Black
                         )
                     is StudentResultState.Success ->
                     {

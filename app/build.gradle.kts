@@ -70,8 +70,8 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
 
-    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
-    implementation("com.google.firebase:firebase-firestore")
+    implementation(platform(libs.firebase.bom.v34120))
+    implementation(libs.firebase.firestore)
 
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.client.android)
@@ -80,6 +80,15 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.cio)
+    testImplementation(libs.mockk)
+    testImplementation(libs.ktor.client.mock)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.ktor.client.content.negotiation.v343)
+    testImplementation(libs.ktor.serialization.kotlinx.json.v343)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

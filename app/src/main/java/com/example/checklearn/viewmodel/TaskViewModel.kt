@@ -44,7 +44,7 @@ class TaskViewModel(
                 _selectedAnswers.value = List(questions.size){ null }
                 _loadingState.value = LoadingState.Success
             } catch(e: Exception){
-                Log.e("lox", e.message.toString())
+                Log.e("TaskViewModel", e.message.toString())
                 _loadingState.value = LoadingState.Error
             }
         }
