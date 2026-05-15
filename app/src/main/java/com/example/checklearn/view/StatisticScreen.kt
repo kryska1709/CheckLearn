@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
+import com.example.checklearn.components.CustomTopAppBar
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.LoadingState
 import com.example.checklearn.navigation.LocalNavigator
@@ -52,36 +53,46 @@ fun StatisticScreen(
         image.value?.let { cameraViewModel.updateText(HandwriteRecognizer().recognizer(it))   }
     }
     SideBarMenu {  drawerState ->
-    CustomScaffold(title = "Задания",
-        navigationIcon = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                IconButton(
-                    onClick = { navigator.popBackStack() }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.arrow),
-                        contentDescription = null,
-                        tint = Color.Black
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            drawerState.open()
+    CustomScaffold(
+        topAppBar = {
+            CustomTopAppBar(
+                title = {
+                    Text(
+                        text = "Задания",
+                        fontSize = 22.sp,
+                        color = Color.Black
+                    )},
+                navigationIcon = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        IconButton(
+                            onClick = { navigator.popBackStack() }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.arrow),
+                                contentDescription = null,
+                                tint = Color.Black
+                            )
                         }
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.menu),
-                        contentDescription = null,
-                        tint = Color.Black
-                    )
-                }
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.menu),
+                                contentDescription = null,
+                                tint = Color.Black
+                            )
+                        }
 
-            }
+                    }
+                }
+            )
         }
     ) { innerPadding ->
         Column(
