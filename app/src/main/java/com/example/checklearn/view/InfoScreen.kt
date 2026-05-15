@@ -8,14 +8,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomInfoCard
 import com.example.checklearn.components.CustomScaffold
+import com.example.checklearn.components.CustomTopAppBar
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.ui.theme.MyGray
 import kotlinx.coroutines.launch
@@ -27,21 +31,30 @@ fun InfoScreen() {
 
     SideBarMenu { drawerState ->
         CustomScaffold(
-            title = "О приложении",
-            navigationIcon = {
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            drawerState.open()
+            topAppBar = {
+                CustomTopAppBar(
+                    title = {
+                        Text(
+                        text = "О приложении",
+                        fontSize = 22.sp,
+                        color = Color.Black
+                    )},
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.menu),
+                                contentDescription = null,
+                                tint = androidx.compose.ui.graphics.Color.Black
+                            )
                         }
                     }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.menu),
-                        contentDescription = null,
-                        tint = androidx.compose.ui.graphics.Color.Black
-                    )
-                }
+                )
             }
         ) { innerPadding ->
             val cards = listOf(

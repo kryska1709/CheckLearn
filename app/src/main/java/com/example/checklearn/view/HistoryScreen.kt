@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -39,6 +41,8 @@ import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.CustomTextField
+import com.example.checklearn.components.CustomTextField2
+import com.example.checklearn.components.CustomTopAppBar
 import com.example.checklearn.components.HistoryItem
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.data.rememberFirebaseAuthLauncher
@@ -77,41 +81,61 @@ fun HistoryScreen(
     val classRoom = remember { mutableStateOf("") }
     SideBarMenu { drawerState ->
         CustomScaffold(
-            title = "История запросов",
-            navigationIcon = {
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            drawerState.open()
+            topAppBar = {
+                CustomTopAppBar(
+                    title = {
+                        Text(
+                            text = "История",
+                            fontSize = 22.sp,
+                            color = Color.White
+                        )},
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.menu),
+                                contentDescription = null,
+                                tint = androidx.compose.ui.graphics.Color.White
+                            )
                         }
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.menu),
-                        contentDescription = null,
-                        tint = Color.Black
-                    )
-                }
+                    },
+                    modifier = Modifier.background(ContrastBlu)
+                )
             }
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MyGray)
-                    .padding(innerPadding),
+                    .background(brush = Brush.verticalGradient(colors = listOf(ContrastBlu,AccentColor)))
+                    .padding(innerPadding)
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 when (uiState.value){
                     HistoryUIState.Unauthorized -> {
+                        Spacer(modifier = Modifier.weight(1f))
+
                         Text(
-                            text = "Пользователь не авторизован",
-                            color = Color.Black
+                            text = "Откройте новые возможности",
+                            fontSize = 22.sp,
+                            color = Color.White
                         )
+                        Text(
+                            text = "Получите полный доступ",
+                            fontSize = 16.sp,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
                         CustomButton(
-                            text = "Авторизоваться",
+                            text = "Войти в аккаунт",
                             textColor = Color.White,
-                            color = ButtonDefaults.buttonColors(ContrastBlu),
+                            color = ButtonDefaults.buttonColors(Color.Transparent),
                         ) {
                             val gso =
                                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -125,24 +149,24 @@ fun HistoryScreen(
                     HistoryUIState.NeedProfileInfo -> {
                         Text(
                             text = "Ваши данные:",
-                            color = Color.Black,
+                            color = Color.White,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
-                        CustomTextField(
+                        CustomTextField2(
                             value = fullName.value,
                             label =  "ФИО",
                             placeholder = "Иванов Иван Иванович",
                             onValueChange ={fullName.value = it} ,
                         )
-                        CustomTextField(
+                        CustomTextField2(
                             value = classRoom.value,
                             label = "Класс/Группа",
                             placeholder = "22ит17",
                             onValueChange ={classRoom.value = it} ,
                         )
                         CustomButton(
-                            color = ButtonDefaults.buttonColors(ContrastBlu),
+                            color = ButtonDefaults.buttonColors(Color.Transparent),
                             text = "Сохранить",
                             textColor = Color.White,
                         ) {
@@ -153,8 +177,7 @@ fun HistoryScreen(
                     HistoryUIState.ShowHistory -> {
                         LazyColumn(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
+                                .fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             items(history.value, key = {it.id}){

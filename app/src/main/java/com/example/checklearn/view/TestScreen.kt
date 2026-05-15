@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
+import com.example.checklearn.components.CustomTopAppBar
 import com.example.checklearn.components.QuestionItem
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.LoadingState
@@ -72,21 +73,30 @@ fun TestScreen(
     }
     SideBarMenu { drawerState ->
         CustomScaffold(
-            title = "Тест",
-            navigationIcon = {
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            drawerState.open()
+            topAppBar = {
+                CustomTopAppBar(
+                    title = {
+                        Text(
+                            text = "Тест",
+                            fontSize = 22.sp,
+                            color = Color.Black
+                        )},
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.menu),
+                                contentDescription = null,
+                                tint = androidx.compose.ui.graphics.Color.Black
+                            )
                         }
                     }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.menu),
-                        contentDescription = null,
-                        tint = androidx.compose.ui.graphics.Color.Black
-                    )
-                }
+                )
             }
         ) { innerPadding ->
             Column(

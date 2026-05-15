@@ -54,6 +54,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
+import com.example.checklearn.components.CustomTopAppBar
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.navigation.LocalNavigator
 import com.example.checklearn.navigation.Routes
@@ -108,20 +109,24 @@ fun CameraScreen(
     }
     SideBarMenu { drawerState ->
         CustomScaffold(
-            navigationIcon = {
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            drawerState.open()
+            topAppBar = {
+                CustomTopAppBar(
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.menu),
+                                contentDescription = null,
+                                tint = androidx.compose.ui.graphics.Color.Black
+                            )
                         }
                     }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.menu),
-                        contentDescription = null,
-                        tint = androidx.compose.ui.graphics.Color.Black
-                    )
-                }
+                )
             }
         ) {
             Box(

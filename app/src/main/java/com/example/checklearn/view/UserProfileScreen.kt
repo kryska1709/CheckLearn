@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import com.example.checklearn.R
 import com.example.checklearn.components.CustomButton
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.CustomTextField
+import com.example.checklearn.components.CustomTopAppBar
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.UserProfile
 import com.example.checklearn.navigation.LocalNavigator
@@ -50,28 +52,42 @@ fun UserProfileScreen(
     val navigator = LocalNavigator.current
     val fullName = remember{ mutableStateOf(profileInfo.value?.fullName?:"") }
     val classRoom = remember { mutableStateOf(profileInfo.value?.classRoom?:"") }
+    LaunchedEffect(profileInfo.value) {
+        fullName.value = profileInfo.value?.fullName?: ""
+        classRoom.value = profileInfo.value?.classRoom?: ""
+    }
     SideBarMenu { drawerState ->
         CustomScaffold(
-            title = "Профиль",
-            navigationIcon = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    IconButton(
-                        onClick = {
-                            scope.launch {
-                                drawerState.open()
+            topAppBar = {
+                CustomTopAppBar(
+                    title = {
+                        Text(
+                            text = "Профиль",
+                            fontSize = 22.sp,
+                            color = Color.Black
+                        )
+                    },
+                    navigationIcon = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.menu),
+                                    contentDescription = null,
+                                    tint = Color.Black
+                                )
                             }
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.menu),
-                            contentDescription = null,
-                            tint = Color.Black
-                        )
                     }
-                }
+                )
             }
         ) { innerPadding ->
             Column(

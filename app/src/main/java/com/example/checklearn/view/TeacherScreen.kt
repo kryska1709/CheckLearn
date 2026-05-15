@@ -24,10 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.checklearn.R
 import com.example.checklearn.components.CardTeacher
 import com.example.checklearn.components.CustomScaffold
 import com.example.checklearn.components.CustomTextField
+import com.example.checklearn.components.CustomTopAppBar
 import com.example.checklearn.components.SideBarMenu
 import com.example.checklearn.model.StudentResultState
 import com.example.checklearn.ui.theme.ContrastBlu
@@ -55,26 +57,30 @@ fun TeacherScreen(
     }
     SideBarMenu { drawerState ->
         CustomScaffold(
-            title = "Кабинет Учителя",
-            navigationIcon = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    IconButton(
-                        onClick = {
-                            scope.launch {
-                                drawerState.open()
+            topAppBar = {
+                CustomTopAppBar(
+                    title = {
+                        Text(
+                            text = "Кабинет Учителя",
+                            fontSize = 22.sp,
+                            color = Color.Black
+                        )},
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
                             }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.menu),
+                                contentDescription = null,
+                                tint = androidx.compose.ui.graphics.Color.Black
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.menu),
-                            contentDescription = null,
-                            tint = Color.Black
-                        )
                     }
-                }
+                )
             }
         ) { innerPadding ->
             Column(
