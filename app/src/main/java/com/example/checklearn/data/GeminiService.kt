@@ -25,7 +25,6 @@ class GeminiService {
             }
             setBody(bodyResponse) //тело запроса по дата классу
         }
-        Log.i("RESPONSEEE",response.bodyAsText())
         return response.body()
     }
 }

@@ -18,12 +18,9 @@ class HandwriteRecognizer {
         recogniser.process(image)
             .addOnSuccessListener {
                 continuation.resume(it.text)
-                Log.i("RECOGNIZERRRR","ВСЕ ЗаШиБиСь")
-                Log.i("RECOGNIZERRRR",it.text)
             }
             .addOnFailureListener {
-                continuation.resume("faillllllllllllllllllllllllllllll")
-                Log.i("FAILLL RECOGNIZERRRR","ВСЕ ПЛОХО Я СДООООООООХ")
+                continuation.resume("fail")
             }
     }
 }
